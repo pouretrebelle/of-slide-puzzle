@@ -25,6 +25,7 @@ void Tile::update() {
 }
 
 void Tile::draw() {
+	image.draw(x*w, y*h);
 }
 
 // function borrowed from https://github.com/jesusgollonet/ofpennereasing

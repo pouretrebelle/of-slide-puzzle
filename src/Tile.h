@@ -11,14 +11,16 @@ public:
 		initialX = _x;
 		initialY = _y;
 		w = _w;
-		w = _h;
+		h = _h;
 	}
 
 	void move(ofVec2f dir, bool easing);
 	void update();
 	void draw();
 
+	ofImage image;
 	bool moving = false;
+	bool updateImage = true;
 	int initialX, initialY;
 	int curFrame;
 	int animLength = 10;

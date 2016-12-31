@@ -81,10 +81,18 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofTranslate(tileGutter, tileGutter);
-	// let's never draw the first tile, it's effecively our blank tile;
+
+	// never draw the first tile, it's effecively our blank tile
 	for (int i = 1; i < tilesY*tilesX; i++) {
 		Tile tile = tiles[i];
-		image.drawSubsection(tile.x*tileW, tile.y*tileH, tileW - tileGutter, tileH - tileGutter, tile.initialX*tileW, tile.initialY*tileH);
+
+		if (tile.updateImage) {
+			ofImage tileImage;
+			tileImage.cropFrom(image, tile.initialX*tileW, tile.initialY*tileH, tileW - tileGutter, tileH - tileGutter);
+			tile.image = tileImage;
+		}
+
+		tile.draw();
 	}
 }
 
