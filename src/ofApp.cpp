@@ -73,8 +73,18 @@ void ofApp::update(){
 	}
 
 	// call update on all the tiles
+	// apart from the first one, we don't care about that one
 	for (int i = 1; i < tilesY*tilesX; i++) {
-		tiles[i].update();
+
+		tiles[i].update(frameCounter);
+
+		// if the tile image should be updated
+		if (tiles[i].updateImage == true) {
+			ofImage tileImage;
+			tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
+			tileImage.cropFrom(image, tiles[i].initialX*tileW, tiles[i].initialY*tileH, tileW - tileGutter, tileH - tileGutter);
+			tiles[i].image.clone(tileImage);
+		}
 	}
 }
 
@@ -84,15 +94,7 @@ void ofApp::draw(){
 
 	// never draw the first tile, it's effecively our blank tile
 	for (int i = 1; i < tilesY*tilesX; i++) {
-		Tile tile = tiles[i];
-
-		if (tile.updateImage) {
-			ofImage tileImage;
-			tileImage.cropFrom(image, tile.initialX*tileW, tile.initialY*tileH, tileW - tileGutter, tileH - tileGutter);
-			tile.image = tileImage;
-		}
-
-		tile.draw();
+		tiles[i].draw();
 	}
 }
 

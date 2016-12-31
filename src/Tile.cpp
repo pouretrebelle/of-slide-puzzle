@@ -24,17 +24,35 @@ void Tile::move(ofVec2f dir, bool easing) {
 	}
 }
 
-void Tile::update() {
+void Tile::update(int frameCounter) {
 	if (moving) {
 		curFrame++;
 		x = easeOutCubic(curFrame, startX, endX-startX, animLength);
 		y = easeOutCubic(curFrame, startY, endY-startY, animLength);
 		if (curFrame >= animLength) moving = false;
 	}
+
+	// update tile based on its initial position
+	// creates diagonal sequential update pattern
+	// based on 6*8 grid
+	if (frameCounter % (6+8) == (initialX + initialY - 1)) {
+		updateImage = true;
+	}
+	// update all of them for the first 10 frames
+	// to assure there is an image for each tile
+	else if (frameCounter > 5) {
+		updateImage = false;
+	}
+	else {
+		updateImage = true;
+	}
 }
 
 void Tile::draw() {
-	image.draw(x*w, y*h);
+	// check to make sure the image has a texture
+	if (image.getWidth() != 0) {
+		image.draw(x*w, y*h);
+	}
 }
 
 // function borrowed from https://github.com/jesusgollonet/ofpennereasing
