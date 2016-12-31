@@ -95,7 +95,7 @@ void ofApp::update(){
 	// apart from the first one, we don't care about that one
 	for (int i = 1; i < tilesY*tilesX; i++) {
 
-		tiles[i].update(frameCounter);
+		tiles[i].update(frameCounter, secondsElapsed);
 
 		// if the tile image should be updated
 		if (tiles[i].updateImage == true) {

@@ -6,14 +6,20 @@ class Tile {
 public:
 
 	void move(ofVec2f dir, bool easing);
-	void update(int frameCounter);
+
+	void update(int frameCounter, float secondsElapsed);
+	void updateS0(int frameCounter);
+
 	void draw();
+	void drawS0();
 
 	ofImage image;
 	bool moving = false;
 	bool updateImage;
 	int initialX, initialY;
 	int curFrame;
+	int scene;
+	float* transitions;
 	int animLength = 10;
 	float startX, startY, endX, endY;
 	float x, y;
