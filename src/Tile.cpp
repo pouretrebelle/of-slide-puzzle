@@ -1,5 +1,14 @@
 #include "Tile.h"
 
+Tile::Tile(int _x, int _y, float _w, float _h) {
+	x = _x;
+	y = _y;
+	initialX = _x;
+	initialY = _y;
+	w = _w;
+	h = _h;
+}
+
 void Tile::move(ofVec2f dir, bool easing) {
 	if (easing) {
 		moving = true;
