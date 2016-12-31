@@ -45,30 +45,41 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	// set seconds elapsed
+	secondsElapsed = ofGetElapsedTimeMillis() * 0.001;
+	// exit program if it's been more than 3 minutes
+	if (secondsElapsed > 3 * 60) ofExit();
+
+	// log the frame rate
 	cout << ofGetFrameRate() << endl;
+
+	// increment the frame counter
 	frameCounter++;
 
 	// update the image frame
-	//if (frameCounter % 30 == 0) {
-		vidGrabber.update();
-		if (vidGrabber.isFrameNew()) {
-			ofImage newImage;
-			newImage.allocate(640, 480, OF_IMAGE_COLOR);
-			newImage.setFromPixels(vidGrabber.getPixels());
-			newImage.mirror(false, true);
-			newImage.resize(windowW, windowH);
-			image = newImage;
-		}
-	//}
+	vidGrabber.update();
+	if (vidGrabber.isFrameNew()) {
+		ofImage newImage;
+		newImage.allocate(640, 480, OF_IMAGE_COLOR);
+		newImage.setFromPixels(vidGrabber.getPixels());
+		newImage.mirror(false, true);
+		newImage.resize(windowW, windowH);
+		image = newImage;
+	}
 
-	// loop back
+	// undo existing moves
+	// once every 10 frames
 	if (frameCounter % 10 == 0) {
+		// if loopBack is true and there are moves
 		if (loopBack && moves.size()) {
+			// move the reverse vector of the last move
 			move(-moves.back());
+			// remove the last move from the array
 			moves.pop_back();
 		}
+		// no more moves
 		else if (loopBack) {
-			loopBack = !loopBack;
+			loopBack = false;
 		}
 	}
 
@@ -96,6 +107,9 @@ void ofApp::draw(){
 	for (int i = 1; i < tilesY*tilesX; i++) {
 		tiles[i].draw();
 	}
+
+	// draw progress through animation in seconds
+	ofDrawBitmapString(ofToString(secondsElapsed), 20, 20);
 }
 
 void ofApp::move(ofVec2f direction = ofVec2f(0, 0)) {

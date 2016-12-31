@@ -21,6 +21,8 @@ class ofApp : public ofBaseApp{
 
 		ofVideoGrabber vidGrabber;
 
+		float secondsElapsed;
+
 		vector<Tile> tiles;
 		int** tilePositions;
 		ofVec2f blank;
