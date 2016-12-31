@@ -33,7 +33,7 @@ void ofApp::setup(){
   // initialise tiles
   for (int y = 0; y < tilesY; y++) {
     for (int x = 0; x < tilesX; x++) {
-      Tile newTile(x, y, tileW, tileH);
+      Tile newTile(x, y, tileW, tileH, tileGutter);
       tiles.push_back(newTile);
       tilePositions[x][y] = y * tilesX + x;
     }

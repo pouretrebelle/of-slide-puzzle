@@ -12,6 +12,7 @@ public:
 
   void draw();
   void drawS0();
+  void drawS1();
 
   ofImage image;
   bool moving = false;
@@ -20,14 +21,17 @@ public:
   int curFrame;
   int scene;
   float* transitions;
-  int animLength = 10;
+  int tileMoveAnimFrames;
+  int tileSizeAnimFrames;
   float startX, startY, endX, endY;
   float x, y;
-  float w, h;
+  float w, h, gutter;
+  float dotSize;
 
   float easeOutCubic(float t, float b, float c, float d);
+  float easeInCubic(float t, float b, float c, float d);
 
-  Tile(int _x, int _y, float _w, float _h);
+  Tile(int _x, int _y, float _w, float _h, float _gutter);
 
 private:
 
