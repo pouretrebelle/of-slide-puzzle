@@ -2,13 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	frameCounter = 0;
 	ofSetFrameRate(60);
 	ofBackground(255);
 
-	initialMoves = 100;
 	tileGutter = 10;
-
 	windowW = ofGetWidth() - tileGutter;
 	windowH = ofGetHeight() - tileGutter;
 	tilesX = 8;
@@ -17,6 +14,15 @@ void ofApp::setup(){
 	tileH = windowH / tilesY;
 
 	blank = ofVec2f(0, 0);
+
+	// animation variables
+	secondsBetweenMoves = 0.3;
+	initialMoves = 100;
+
+	// set timers
+	secondsElapsed = 0;
+	secondsElapsedLastMoved = 0;
+	frameCounter = 0;
 
 	// initialise tile positions array
 	tilePositions = new int*[tilesX];
@@ -68,8 +74,8 @@ void ofApp::update(){
 	}
 
 	// undo existing moves
-	// once every 10 frames
-	if (frameCounter % 10 == 0) {
+	// every secondsBetweenMoves
+	if (secondsElapsedLastMoved < (secondsElapsed - secondsBetweenMoves)) {
 		// if loopBack is true and there are moves
 		if (loopBack && moves.size()) {
 			// move the reverse vector of the last move
@@ -81,6 +87,8 @@ void ofApp::update(){
 		else if (loopBack) {
 			loopBack = false;
 		}
+		// increment last moved variable
+		secondsElapsedLastMoved += secondsBetweenMoves;
 	}
 
 	// call update on all the tiles

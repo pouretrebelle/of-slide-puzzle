@@ -38,7 +38,7 @@ void Tile::update(int frameCounter) {
 	if (frameCounter % (6+8) == (initialX + initialY - 1)) {
 		updateImage = true;
 	}
-	// update all of them for the first 10 frames
+	// update all of them for the first 5 frames
 	// to assure there is an image for each tile
 	else if (frameCounter > 5) {
 		updateImage = false;
