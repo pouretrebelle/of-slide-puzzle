@@ -237,7 +237,6 @@ void Tile::move(ofVec2f dir, bool easing) {
 // reduce to dots
 
 void Tile::updateS1(int frameCounter) {
-  updateImageSometimes(frameCounter);
 }
 
 void Tile::drawS1() {
