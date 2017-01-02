@@ -121,11 +121,26 @@ void Tile::updateImageSometimes(int frameCounter) {
 //-------------------------------------
 void Tile::updateBoids(int frameCounter) {
   // bounce off borders
-  if (pos.x < 0 || pos.x > ofGetWindowWidth()) {
+  // and push position to stop getting stuck inside edge
+  if (pos.x < dotSize) {
+    // top
     vel.x *= -1;
+    pos.x++;
   }
-  if (pos.y < 0 || pos.y > ofGetWindowHeight()) {
+  else if (pos.x > ofGetWindowWidth()-dotSize) {
+    // bottom
+    vel.x *= -1;
+    pos.x--;
+  }
+  if (pos.y < dotSize) {
+    // left
     vel.y *= -1;
+    pos.y++;
+  }
+  else if (pos.y > ofGetWindowHeight() - dotSize) {
+    // right
+    vel.y *= -1;
+    pos.y--;
   }
 
   // clamp velocity
