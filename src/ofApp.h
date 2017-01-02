@@ -10,34 +10,40 @@ class ofApp : public ofBaseApp{
     void update();
     void updateTile(int i);
     void draw();
-    void move(ofVec2f direction);
-
-    void initialiseMoves(int count);
-
-    void windowResized(int w, int h);
-    void mousePressed(int x, int y, int button);
-    void keyPressed(int key);
-
-    ofVec2f getADirection();
-
-    ofVideoGrabber vidGrabber;
 
     float secondsElapsed;
     float secondsElapsedLastMoved;
     float secondsBetweenMoves;
 
     vector<Tile> tiles;
+    int frameCounter;
+    int windowW, windowH;
+
+
+    // Scene 0
+    //===================================
+
+    ofVideoGrabber vidGrabber;
+    bool loopBack;
     int** tilePositions;
+    int initialMoves;
+    int tileGutter;
     ofVec2f blank;
     ofVec2f lastDirection;
     vector<ofVec2f> moves;
     ofImage image;
-    int frameCounter;
-    int initialMoves;
-    int tileGutter;
-    int windowW, windowH;
     int tilesX, tilesY;
     float tileW, tileH;
+    ofVec2f getADirection();
+    void move(ofVec2f direction);
+    void initialiseMoves(int count);
 
-    bool loopBack;
+
+    // Interaction
+    //===================================
+
+    void windowResized(int w, int h);
+    void mousePressed(int x, int y, int button);
+    void keyPressed(int key);
+
 };

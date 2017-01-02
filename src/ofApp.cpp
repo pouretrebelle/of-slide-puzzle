@@ -7,6 +7,14 @@ void ofApp::setup(){
   ofSetFrameRate(60);
   ofBackground(255);
 
+  // set timers
+  secondsElapsed = 0;
+  secondsElapsedLastMoved = 0;
+  frameCounter = 0;
+
+  // Scene 0
+  //-----------------------------------
+
   tileGutter = 10;
   windowW = ofGetWidth() - tileGutter;
   windowH = ofGetHeight() - tileGutter;
@@ -14,17 +22,11 @@ void ofApp::setup(){
   tilesY = 6;
   tileW = windowW / tilesX;
   tileH = windowH / tilesY;
-
   blank = ofVec2f(0, 0);
 
   // animation variables
   secondsBetweenMoves = 0.3;
   initialMoves = 100;
-
-  // set timers
-  secondsElapsed = 0;
-  secondsElapsedLastMoved = 0;
-  frameCounter = 0;
 
   // initialise tile positions array
   tilePositions = new int*[tilesX];
