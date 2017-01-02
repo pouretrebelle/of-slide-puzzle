@@ -14,6 +14,13 @@ public:
   float* transitions;
 
 
+  // Shared Functions
+  //===================================
+
+  void updateImageSometimes(int frameCounter);
+  void updateBoids(int frameCounter);
+
+
   // Scene 0
   //===================================
   // solve puzzle
@@ -73,7 +80,6 @@ public:
 
   float easeOutCubic(float t, float b, float c, float d);
   float easeInCubic(float t, float b, float c, float d);
-  void updateImageSometimes(int frameCounter);
 
 private:
 

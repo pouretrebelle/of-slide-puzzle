@@ -93,17 +93,11 @@ void Tile::draw() {
 }
 
 
-// Helper Functions
+// Shared Functions
 //=====================================
 
-// functions borrowed from https://github.com/jesusgollonet/ofpennereasing
-float Tile::easeOutCubic(float t, float b, float c, float d) {
-  return c*((t = t / d - 1)*t*t + 1) + b;
-}
-float Tile::easeInCubic(float t, float b, float c, float d) {
-  return c*(t /= d)*t*t + b;
-}
-
+// Image Updates - every scene
+//-------------------------------------
 void Tile::updateImageSometimes(int frameCounter) {
   // update tile based on its initial position
   // creates diagonal sequential update pattern
@@ -114,6 +108,37 @@ void Tile::updateImageSometimes(int frameCounter) {
   else {
     updateImage = false;
   }
+}
+
+// Boid Updates - scene 2-3
+//-------------------------------------
+void Tile::updateBoids(int frameCounter) {
+  // bounce off borders
+  if (pos.x < 0 || pos.x > ofGetWindowWidth()) {
+    vel.x *= -1;
+  }
+  if (pos.y < 0 || pos.y > ofGetWindowHeight()) {
+    vel.y *= -1;
+  }
+
+  // clamp velocity
+  ofVec2f clampedVel = vel;
+  if (clampedVel.length() > speedMax) {
+    clampedVel.scale(speedMax);
+  }
+
+  // update position
+  pos += clampedVel;
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
 }
 
 
@@ -204,32 +229,11 @@ void Tile::setupS2() {
 }
 
 void Tile::updateS2(int frameCounter) {
-  // bounce off borders
-  if (pos.x < 0 || pos.x > ofGetWindowWidth()) {
-    vel.x *= -1;
-  }
-  if (pos.y < 0 || pos.y > ofGetWindowHeight()) {
-    vel.y *= -1;
-  }
-
   // update maximum speed
   if (speedMax < speedMaxLimit) {
     speedMax += speedMaxIncrement;
   }
-
-  // clamp velocity
-  ofVec2f clampedVel = vel;
-  if (clampedVel.length() > speedMax) {
-    clampedVel.scale(speedMax);
-  }
-
-  // update position
-  pos += clampedVel;
-
-  // so that ofApp can update targetColor
-  updateImageSometimes(frameCounter);
-  // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
+  updateBoids(frameCounter);
 }
 
 void Tile::drawS2() {
@@ -259,4 +263,16 @@ void Tile::updateS3(int frameCounter) {
 }
 
 void Tile::drawS3() {
+}
+
+
+// Helper Functions
+//=====================================
+
+// functions borrowed from https://github.com/jesusgollonet/ofpennereasing
+float Tile::easeOutCubic(float t, float b, float c, float d) {
+  return c*((t = t / d - 1)*t*t + 1) + b;
+}
+float Tile::easeInCubic(float t, float b, float c, float d) {
+  return c*(t /= d)*t*t + b;
 }
