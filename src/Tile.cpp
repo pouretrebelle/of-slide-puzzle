@@ -33,8 +33,10 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // Scene 2
   //-----------------------------------
-  speed = 5;
-  speedMax = 6;
+  speed = 3;
+  speedMax = 0;
+  speedMaxIncrement = 0.05;
+  speedMaxLimit = 4;
 }
 
 
@@ -195,13 +197,19 @@ void Tile::updateS2(int frameCounter) {
     vel.y *= -1;
   }
 
-  // clamp speed
-  if (vel.length() > speedMax) {
-    vel.scale(speedMax);
+  // update maximum speed
+  if (speedMax < speedMaxLimit) {
+    speedMax += speedMaxIncrement;
+  }
+
+  // clamp velocity
+  ofVec2f clampedVel = vel;
+  if (clampedVel.length() > speedMax) {
+    clampedVel.scale(speedMax);
   }
 
   // update position
-  pos += vel;
+  pos += clampedVel;
 }
 
 void Tile::drawS2() {

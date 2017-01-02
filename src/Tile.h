@@ -47,6 +47,8 @@ public:
   ofColor color;
   float speed;
   float speedMax;
+  float speedMaxIncrement;
+  float speedMaxLimit;
   void setupS2();
   void updateS2(int frameCounter);
   void drawS2();
