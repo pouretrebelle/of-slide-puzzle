@@ -21,6 +21,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   // in ofApp.cpp, and the initial position of
   transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
   transitions[1] = transitions[0] + 3; // ~35 seconds
+  transitions[2] = 60 + (initialX + initialY) * 1; // 60-75 seconds
 
   // Scene 0
   //-----------------------------------
@@ -61,12 +62,19 @@ void Tile::update(int frameCounter, float secondsElapsed) {
     curFrame = 0;
     setupS2();
   }
+  else if (secondsElapsed > transitions[2] && scene < 3) {
+    // scene 3
+    scene = 3;
+    curFrame = 0;
+    setupS3();
+  }
 
   // update scene
   switch (scene) {
   case 0: updateS0(frameCounter); break;
   case 1: updateS1(frameCounter); break;
   case 2: updateS2(frameCounter); break;
+  case 3: updateS3(frameCounter); break;
   }
 }
 
@@ -80,6 +88,7 @@ void Tile::draw() {
   case 0: drawS0(); break;
   case 1: drawS1(); break;
   case 2: drawS2(); break;
+  case 3: drawS3(); break;
   }
 }
 
@@ -175,7 +184,6 @@ void Tile::drawS1() {
 }
 
 
-
 // Scene 2
 //=====================================
 // boid about
@@ -237,4 +245,18 @@ void Tile::drawS2() {
 
   ofDrawRectangle(-dotSize*0.5, -dotSize*0.5, dotSize, dotSize);
   ofPopMatrix();
+}
+
+
+// Scene 3
+//=====================================
+// grow into circles
+
+void Tile::setupS3() {
+}
+
+void Tile::updateS3(int frameCounter) {
+}
+
+void Tile::drawS3() {
 }

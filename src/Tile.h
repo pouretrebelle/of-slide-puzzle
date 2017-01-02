@@ -59,6 +59,15 @@ public:
   void drawS2();
 
 
+  // Scene 3
+  //===================================
+  // grow into circles
+
+  void setupS3();
+  void updateS3(int frameCounter);
+  void drawS3();
+
+
   // Helper Functions
   //===================================
 
