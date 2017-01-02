@@ -52,17 +52,6 @@ void ofApp::setup(){
   // initialise the first x moves and the looper
   initialiseMoves(initialMoves);
   loopBack = true;
-
-
-  // Scene 2
-  //-----------------------------------
-
-  avoidanceDist = 40;
-  avoidanceScalar = 0.01;
-  cohesionDist = 80;
-  cohesionScalar = 0.005;
-  alignDist = 60;
-  alignScalar = 0.01;
 }
 
 
@@ -114,11 +103,6 @@ void ofApp::update(){
   // apart from the first one, we don't care about that one
   for (int i = 1; i < tilesY*tilesX; i++) {
     updateTile(i);
-  }
-
-  // hacky hack to increase avoidance after scene 2
-  if (secondsElapsed > 60 && avoidanceScalar < 1) {
-    avoidanceScalar += 0.01;
   }
 }
 
@@ -174,18 +158,18 @@ void ofApp::updateTile(int i) {
       if (tiles[j].scene > 1 && tiles[j].scene < 4 && j != i) {
 
         // Seperate
-        if (dist < avoidanceDist) {
+        if (dist < tiles[i].avoidanceDist) {
           seperate -= (tiles[j].pos - pos);
         }
 
         // Cohesion
-        if (dist < cohesionDist) {
+        if (dist < tiles[i].cohesionDist) {
           cohesion += tiles[j].pos;
           numNeighboursCohesion++;
         }
 
         // Align
-        if (dist < alignDist) {
+        if (dist < tiles[i].alignDist) {
           align += tiles[j].vel;
           numNeighboursAlign++;
         }
@@ -200,21 +184,21 @@ void ofApp::updateTile(int i) {
     }
 
     // Seperate
-    seperate *= avoidanceScalar;
+    seperate *= tiles[i].avoidanceScalar;
     tiles[i].vel += seperate;
 
     // Cohesion
     if (numNeighboursCohesion > 0) {
       cohesion /= numNeighboursCohesion;
       cohesion -= pos;
-      cohesion *= cohesionScalar;
+      cohesion *= tiles[i].cohesionScalar;
       tiles[i].vel += cohesion;
     }
 
     // Align
     if (numNeighboursAlign > 0) {
       align /= numNeighboursAlign;
-      align *= alignScalar;
+      align *= tiles[i].alignScalar;
       tiles[i].vel += align;
     }
 

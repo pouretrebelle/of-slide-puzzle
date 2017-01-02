@@ -40,6 +40,12 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   speedMaxIncrement = 0.05;
   speedMaxLimit = 4;
   colorLerpScalar = 0.1;
+  avoidanceDist = 40;
+  avoidanceScalar = 0.01;
+  cohesionDist = 80;
+  cohesionScalar = 0.005;
+  alignDist = 60;
+  alignScalar = 0.01;
 }
 
 
@@ -304,6 +310,10 @@ void Tile::setupS3() {
   squircleness = 0;
   squirclenessIncrement = 0.02;
   dotSizeIncrement = 0;
+
+  // up avoidance scalar to avoid overlapping
+  avoidanceScalar = 0.5;
+  avoidanceDistIncrement = 0.1;
 }
 
 void Tile::updateS3(int frameCounter) {
@@ -328,6 +338,10 @@ void Tile::updateS3(int frameCounter) {
   else {
     dotSize = dotSizeTarget;
   }
+
+  // lerp avoidance distance towards dot size
+  // to encourage biggest dots possible
+  avoidanceDist = ofLerp(avoidanceDist, dotSize+gutter*0.5, avoidanceDistIncrement);
 }
 
 void Tile::drawS3() {

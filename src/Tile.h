@@ -62,6 +62,12 @@ public:
   float speedMax;
   float speedMaxIncrement;
   float speedMaxLimit;
+  float avoidanceDist;
+  float avoidanceScalar;
+  float cohesionDist;
+  float cohesionScalar;
+  float alignDist;
+  float alignScalar;
   void setupS2();
   void updateS2(int frameCounter);
   void drawS2();
@@ -75,6 +81,7 @@ public:
   float squirclenessIncrement;
   float dotSizeTarget;
   float dotSizeIncrement;
+  float avoidanceDistIncrement;
   void setupS3();
   void updateS3(int frameCounter);
   void drawS3();
