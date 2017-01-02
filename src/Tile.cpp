@@ -31,6 +31,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   //-----------------------------------
   tileSizeAnimFrames = 30;
   dotSize = 10;
+  dotSizeTarget = dotSize;
 
   // Scene 2
   //-----------------------------------
@@ -139,6 +140,50 @@ void Tile::updateBoids(int frameCounter) {
   updateImageSometimes(frameCounter);
   // lerp color towards target color
   color.lerp(targetColor, colorLerpScalar);
+}
+
+// Draw Square/Circle hybrid - scene 3
+//-------------------------------------
+// from example in https://forum.processing.org/two/discussion/1941/transform-a-square-into-a-circle
+void Tile::drawSquircle(float radius, float t) {
+  // square for t = 0
+  // circle for t = 1
+  float circleX, circleY, squareX, squareY;
+  ofPath squircle;
+
+  for (float angle = DEG_TO_RAD*5; angle < TWO_PI; angle += DEG_TO_RAD*10) {
+    circleX = radius*cos(angle);
+    circleY = radius*sin(angle);
+
+    if ((angle > DEG_TO_RAD*225) && (angle <= DEG_TO_RAD*315)) {
+      // top side
+      float squareRadius = radius / sin(angle);
+      squareX = - squareRadius*cos(angle);
+      squareY = - radius;
+    }
+    else if ((angle > DEG_TO_RAD*45) && (angle <= DEG_TO_RAD*135)) {
+      // bottom side
+      float squareRadius = radius / sin(angle);
+      squareX = squareRadius*cos(angle);
+      squareY = radius;
+    }
+    else if ((angle > DEG_TO_RAD*135) && (angle <= DEG_TO_RAD*225)) {
+      // left side
+      float squareRadius = radius / cos(angle);
+      squareX = - radius;
+      squareY = - squareRadius*sin(angle);
+    }
+    else {
+      // right side
+      float squareRadius = radius / cos(angle);
+      squareX = radius;
+      squareY = squareRadius*sin(angle);
+    }
+    squircle.lineTo(ofLerp(squareX, circleX, t), ofLerp(squareY, circleY, t));
+  }
+
+  squircle.setFillColor(color);
+  squircle.draw();
 }
 
 
@@ -257,12 +302,47 @@ void Tile::drawS2() {
 // grow into circles
 
 void Tile::setupS3() {
+  squircleness = 0;
+  squirclenessIncrement = 0.02;
+  dotSizeIncrement = 0;
 }
 
 void Tile::updateS3(int frameCounter) {
+  updateBoids(frameCounter);
+
+  // circlify dots
+  if (squircleness < 1) {
+    squircleness += squirclenessIncrement;
+  }
+
+  // accelerate dot size
+  if (dotSizeIncrement < 0.2) {
+    dotSizeIncrement += 0.005;
+  }
+
+  // lerp dot size towards target if it's smaller than the target
+  if (dotSize < dotSizeTarget) {
+    dotSize = ofLerp(dotSize, dotSizeTarget, dotSizeIncrement);
+  }
+  // otherwise jump to target
+  // to avoid overlap
+  else {
+    dotSize = dotSizeTarget;
+  }
 }
 
 void Tile::drawS3() {
+  ofPushMatrix();
+
+  // translate to position
+  ofTranslate(pos.x, pos.y);
+
+  // rotate context to velocity minus 45deg
+  // so corner of rectangle always points forward
+  ofRotate(ofVec2f(1, -1).angle(vel));
+
+  drawSquircle(dotSize*0.5, squircleness);
+  ofPopMatrix();
 }
 
 

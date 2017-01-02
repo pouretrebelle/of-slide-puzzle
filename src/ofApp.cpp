@@ -115,6 +115,11 @@ void ofApp::update(){
   for (int i = 1; i < tilesY*tilesX; i++) {
     updateTile(i);
   }
+
+  // hacky hack to increase avoidance after scene 2
+  if (secondsElapsed > 60 && avoidanceScalar < 1) {
+    avoidanceScalar += 0.01;
+  }
 }
 
 
@@ -149,9 +154,9 @@ void ofApp::updateTile(int i) {
     tiles[i].targetColor = tileImage.getColor(tileW*0.5, tileH*0.5);
   }
 
-  // Scene 2
+  // Scene 2-3
   //-----------------------------------
-  if (tiles[i].scene == 2) {
+  if (tiles[i].scene > 1 && tiles[i].scene < 4) {
 
     ofVec2f pos = tiles[i].pos;
     ofVec2f seperate = ofVec2f(0, 0);
@@ -159,11 +164,14 @@ void ofApp::updateTile(int i) {
     ofVec2f align = ofVec2f(0, 0);
     int numNeighboursCohesion = 0;
     int numNeighboursAlign = 0;
+    float closestDistance = windowW;
 
     // loop through others
     for (int j = 0; j < tilesY*tilesX; j++) {
-      if (tiles[j].scene == 2 && j != i) {
-        float dist = pos.distance(tiles[j].pos);
+      float dist = pos.distance(tiles[j].pos);
+
+      // if target is scene 2-3 and not itself
+      if (tiles[j].scene > 1 && tiles[j].scene < 4 && j != i) {
 
         // Seperate
         if (dist < avoidanceDist) {
@@ -180,6 +188,13 @@ void ofApp::updateTile(int i) {
         if (dist < alignDist) {
           align += tiles[j].vel;
           numNeighboursAlign++;
+        }
+      }
+
+      // if it's scene 3 and not itself
+      if (tiles[i].scene == 3 && j != i) {
+        if (closestDistance > dist) {
+          closestDistance = dist;
         }
       }
     }
@@ -202,6 +217,9 @@ void ofApp::updateTile(int i) {
       align *= alignScalar;
       tiles[i].vel += align;
     }
+
+    // Scene 3 closest dot
+    tiles[i].dotSizeTarget = closestDistance - tileGutter*0.5;
   }
 }
 

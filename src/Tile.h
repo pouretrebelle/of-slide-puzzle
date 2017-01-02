@@ -19,6 +19,7 @@ public:
 
   void updateImageSometimes(int frameCounter);
   void updateBoids(int frameCounter);
+  void drawSquircle(float radius, float t);
 
 
   // Scene 0
@@ -70,6 +71,10 @@ public:
   //===================================
   // grow into circles
 
+  float squircleness;
+  float squirclenessIncrement;
+  float dotSizeTarget;
+  float dotSizeIncrement;
   void setupS3();
   void updateS3(int frameCounter);
   void drawS3();
