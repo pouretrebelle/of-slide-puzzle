@@ -5,6 +5,7 @@
 
 void ofApp::setup(){
   ofSetFrameRate(60);
+  ofSetCircleResolution(100);
   ofBackground(255);
 
   // set timers
@@ -24,6 +25,10 @@ void ofApp::setup(){
   tileW = windowW / tilesX;
   tileH = windowH / tilesY;
   blank = ofVec2f(0, 0);
+
+  // Scene 4
+  //-----------------------------------
+  reInitialised = false;
 
   // animation variables
   secondsBetweenMoves = 0.3;
@@ -99,6 +104,12 @@ void ofApp::update(){
     secondsElapsedLastMoved += secondsBetweenMoves;
   }
 
+  // reinitialise moves after a minute for Scene 4
+  if (secondsElapsed > 60 && !reInitialised) {
+    initialiseMoves(initialMoves);
+    reInitialised = true;
+  }
+
   // call update on all the tiles
   // apart from the first one, we don't care about that one
   for (int i = 1; i < tilesY*tilesX; i++) {
@@ -138,9 +149,9 @@ void ofApp::updateTile(int i) {
     tiles[i].targetColor = tileImage.getColor(tileW*0.5, tileH*0.5);
   }
 
-  // Scene 2-3
+  // Boiding
   //-----------------------------------
-  if (tiles[i].scene > 1 && tiles[i].scene < 4) {
+  if (tiles[i].boiding) {
 
     ofVec2f pos = tiles[i].pos;
     ofVec2f seperate = ofVec2f(0, 0);
@@ -154,8 +165,8 @@ void ofApp::updateTile(int i) {
     for (int j = 0; j < tilesY*tilesX; j++) {
       float dist = pos.distance(tiles[j].pos);
 
-      // if target is scene 2-3 and not itself
-      if (tiles[j].scene > 1 && tiles[j].scene < 4 && j != i) {
+      // if target is boiding and not itself
+      if (tiles[j].boiding && j != i) {
 
         // Seperate
         if (dist < tiles[i].avoidanceDist) {
@@ -175,8 +186,8 @@ void ofApp::updateTile(int i) {
         }
       }
 
-      // if it's scene 3 and not itself
-      if (tiles[i].scene == 3 && j != i) {
+      // if it's scene 3-4 and not itself
+      if (tiles[i].scene > 2 && tiles[i].scene < 5 && j != i) {
         if (closestDistance > dist) {
           closestDistance = dist;
         }
@@ -202,8 +213,8 @@ void ofApp::updateTile(int i) {
       tiles[i].vel += align;
     }
 
-    // Scene 3 closest dot
-    tiles[i].dotSizeTarget = closestDistance - tileGutter*0.5;
+    // Scene 3-4 closest dot
+    tiles[i].dotSizeTarget = closestDistance - tileGutter;
   }
 }
 

@@ -22,7 +22,10 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
   transitions[1] = transitions[0] + 3; // ~35 seconds
   transitions[2] = 60 + (initialX + initialY) * 1; // 60-75 seconds
-  transitions[3] = 90 + (initialX + initialY) * 1; // 90-105 seconds
+  transitions[3] = 90 + (initialX + initialY) * 2; // 90-105 seconds
+
+  // controls whether ofApp.cpp compares tiles
+  boiding = false;
 
   // Scene 0
   //-----------------------------------
@@ -126,7 +129,7 @@ void Tile::updateImageSometimes(int frameCounter) {
   }
 }
 
-// Boid Updates - scene 2-3
+// Boid Updates - scene 2-4
 //-------------------------------------
 void Tile::updateBoids(int frameCounter) {
   // bounce off borders
@@ -134,22 +137,18 @@ void Tile::updateBoids(int frameCounter) {
   if (pos.x < dotSize) {
     // top
     vel.x *= -1;
-    pos.x++;
   }
   else if (pos.x > ofGetWindowWidth()-dotSize) {
     // bottom
     vel.x *= -1;
-    pos.x--;
   }
   if (pos.y < dotSize) {
     // left
     vel.y *= -1;
-    pos.y++;
   }
   else if (pos.y > ofGetWindowHeight() - dotSize) {
     // right
     vel.y *= -1;
-    pos.y--;
   }
 
   // clamp velocity
@@ -292,6 +291,9 @@ void Tile::setupS2() {
   pos.x = x*w + (w-gutter)*0.5;
   pos.y = y*h + (h-gutter)*0.5;
 
+  // make ofApp.cpp start comparing tiles
+  boiding = true;
+
   // get color from image
   // targetColor is updated in ofApp's updateTile()
   color = targetColor;
@@ -336,7 +338,7 @@ void Tile::setupS3() {
   dotSizeIncrement = 0;
 
   // up avoidance scalar to avoid overlapping
-  avoidanceScalar = 0.5;
+  avoidanceScalar = 0.1;
   avoidanceDistIncrement = 0.1;
 }
 
@@ -388,12 +390,50 @@ void Tile::drawS3() {
 // reform grid
 
 void Tile::setupS4() {
+  posTargetAchieved = false;
+  posTargetLerp = 0.01;
+  posTargetIncrement = 0.001;
+  posTarget.x = x*w + (w-gutter)*0.5;
+  posTarget.y = y*h + (h-gutter)*0.5;
+  avoidanceScalar = 0.1;
 }
 
 void Tile::updateS4(int frameCounter) {
+  if (!posTargetAchieved && (posTargetLerp > 0.5 || pos.distance(posTarget) < 5)) {
+    vel.x = 0;
+    vel.y = 0;
+
+    // stop ofApp.cpp comparing it to other tiles
+    boiding = true;
+
+    posTargetAchieved = true;
+  }
+
+  if (!posTargetAchieved) {
+    updateBoids(frameCounter);
+
+    // lerp dot size towards target
+    dotSize = ofLerp(dotSize, dotSizeTarget, dotSizeIncrement);
+
+    // lerp avoidance distance a bit inside dot size
+    avoidanceDist = ofLerp(avoidanceDist, dotSize - gutter*0.5, avoidanceDistIncrement);
+
+    // use exponentials to control the position lerping factor
+    // to counteract zeno's position
+    posTargetLerp = pow(posTargetLerp, 0.99);
+    pos.x = ofLerp(pos.x, posTarget.x, posTargetLerp);
+    pos.y = ofLerp(pos.y, posTarget.y, posTargetLerp);
+  }
+  else {
+    dotSize = ofLerp(dotSize, w - gutter, 0.1);
+    pos.x = ofLerp(pos.x, posTarget.x, 0.1);
+    pos.y = ofLerp(pos.y, posTarget.y, 0.1);
+  }
 }
 
 void Tile::drawS4() {
+  ofSetColor(color);
+  ofDrawCircle(pos.x, pos.y, dotSize*0.5);
 }
 
 

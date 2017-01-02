@@ -39,6 +39,12 @@ class ofApp : public ofBaseApp{
     void initialiseMoves(int count);
 
 
+    // Scene 4
+    //=================================
+
+    bool reInitialised;
+
+
     // Interaction
     //===================================
 

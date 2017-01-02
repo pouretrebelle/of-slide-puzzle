@@ -57,6 +57,7 @@ public:
   ofVec2f vel;
   ofColor color;
   ofColor targetColor;
+  bool boiding;
   float colorLerpScalar;
   float speed;
   float speedMax;
@@ -91,6 +92,10 @@ public:
   //===================================
   // reform grid
 
+  ofVec2f posTarget;
+  bool posTargetAchieved;
+  float posTargetLerp;
+  float posTargetIncrement;
   void setupS4();
   void updateS4(int frameCounter);
   void drawS4();
