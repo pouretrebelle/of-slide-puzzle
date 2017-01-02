@@ -99,16 +99,7 @@ void ofApp::update(){
   // call update on all the tiles
   // apart from the first one, we don't care about that one
   for (int i = 1; i < tilesY*tilesX; i++) {
-
-    tiles[i].update(frameCounter, secondsElapsed);
-
-    // if the tile image should be updated
-    if (tiles[i].updateImage == true) {
-      ofImage tileImage;
-      tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
-      tileImage.cropFrom(image, tiles[i].initialX*tileW, tiles[i].initialY*tileH, tileW - tileGutter, tileH - tileGutter);
-      tiles[i].image.clone(tileImage);
-    }
+    updateTile(i);
   }
 }
 
@@ -126,6 +117,22 @@ void ofApp::draw(){
 
   // draw progress through animation in seconds
   ofDrawBitmapString(ofToString(secondsElapsed), 20, 20);
+}
+
+
+// Tile Update
+//=====================================
+
+void ofApp::updateTile(int i) {
+  tiles[i].update(frameCounter, secondsElapsed);
+
+  // if the tile image should be updated
+  if (tiles[i].updateImage == true) {
+    ofImage tileImage;
+    tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
+    tileImage.cropFrom(image, tiles[i].initialX*tileW, tiles[i].initialY*tileH, tileW - tileGutter, tileH - tileGutter);
+    tiles[i].image.clone(tileImage);
+  }
 }
 
 

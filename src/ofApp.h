@@ -8,6 +8,7 @@ class ofApp : public ofBaseApp{
   public:
     void setup();
     void update();
+    void updateTile(int i);
     void draw();
     void move(ofVec2f direction);
 
