@@ -26,6 +26,8 @@ public:
 	float x, y;
 	float w, h;
 
+	float easeOutCubic(float t, float b, float c, float d);
+
 private:
 
 };

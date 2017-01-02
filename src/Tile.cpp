@@ -1,5 +1,4 @@
 #include "Tile.h"
-#include "ofxEasing.h"
 
 void Tile::move(ofVec2f dir, bool easing) {
 	if (easing) {
@@ -19,11 +18,16 @@ void Tile::move(ofVec2f dir, bool easing) {
 void Tile::update() {
 	if (moving) {
 		curFrame++;
-		x = ofxeasing::map_clamp(curFrame, 0, animLength, startX, endX, &ofxeasing::quad::easeOut);
-		y = ofxeasing::map_clamp(curFrame, 0, animLength, startY, endY, &ofxeasing::quad::easeOut);
-		if (curFrame > animLength) moving = false;
+		x = easeOutCubic(curFrame, startX, endX-startX, animLength);
+		y = easeOutCubic(curFrame, startY, endY-startY, animLength);
+		if (curFrame >= animLength) moving = false;
 	}
 }
 
 void Tile::draw() {
+}
+
+// function borrowed from https://github.com/jesusgollonet/ofpennereasing
+float Tile::easeOutCubic(float t, float b, float c, float d) {
+	return c*((t = t / d - 1)*t*t + 1) + b;
 }
