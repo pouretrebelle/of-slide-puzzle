@@ -177,7 +177,7 @@ void Tile::updateBoids(int frameCounter) {
 // Draw Square/Circle hybrid - scene 3
 //-------------------------------------
 // from example in https://forum.processing.org/two/discussion/1941/transform-a-square-into-a-circle
-void Tile::drawSquircle(float radius, float t) {
+ofPath Tile::pathSquircle(float radius, float t) {
   // square for t = 0
   // circle for t = 1
   float circleX, circleY, squareX, squareY;
@@ -213,9 +213,8 @@ void Tile::drawSquircle(float radius, float t) {
     }
     squircle.lineTo(ofLerp(squareX, circleX, t), ofLerp(squareY, circleY, t));
   }
-
-  squircle.setFillColor(color);
-  squircle.draw();
+  squircle.close();
+  return squircle;
 }
 
 
@@ -387,7 +386,10 @@ void Tile::drawS3() {
   // so corner of rectangle always points forward
   ofRotate(ofVec2f(1, -1).angle(vel));
 
-  drawSquircle(dotSize*0.5, squircleness);
+  ofPath squircle = pathSquircle(dotSize*0.5, squircleness);
+  squircle.setFillColor(color);
+  squircle.draw();
+
   ofPopMatrix();
 }
 
@@ -470,7 +472,10 @@ void Tile::drawS5() {
   // translate to position
   ofTranslate(pos.x, pos.y);
 
-  drawSquircle((w-gutter)*0.5, squircleness);
+  ofPath squircle = pathSquircle(dotSize*0.5, squircleness);
+  squircle.setFillColor(color);
+  squircle.draw();
+
   ofPopMatrix();
 }
 

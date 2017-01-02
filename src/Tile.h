@@ -19,7 +19,7 @@ public:
 
   void updateImageSometimes(int frameCounter);
   void updateBoids(int frameCounter);
-  void drawSquircle(float radius, float t);
+  ofPath pathSquircle(float radius, float t);
 
 
   // Scene 0
