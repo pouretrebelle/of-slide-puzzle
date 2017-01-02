@@ -230,7 +230,7 @@ void Tile::drawS2() {
 
   // rotate context to velocity minus 45deg
   // so corner of rectangle always points forward
-  ofRotate(vel.angle(ofVec2f(-1, 1)));
+  ofRotate(ofVec2f(1, -1).angle(vel));
 
   ofDrawRectangle(-dotSize*0.5, -dotSize*0.5, dotSize, dotSize);
   ofPopMatrix();
