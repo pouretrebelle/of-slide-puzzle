@@ -19,8 +19,8 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // first transition is determined by secondsBetweenMoves and initialMoves
   // in ofApp.cpp, and the initial position of
-  transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3;
-  transitions[1] = transitions[0] + 3;
+  transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
+  transitions[1] = transitions[0] + 3; // ~35 seconds
 
   // Scene 0
   //-----------------------------------
@@ -110,6 +110,7 @@ void Tile::updateImageSometimes(int frameCounter) {
 
 // Scene 0
 //=====================================
+// solve puzzle
 
 void Tile::updateS0(int frameCounter) {
   if (moving) {
@@ -154,6 +155,7 @@ void Tile::move(ofVec2f dir, bool easing) {
 
 // Scene 1
 //=====================================
+// reduce to dots
 
 void Tile::updateS1(int frameCounter) {
   updateImageSometimes(frameCounter);
@@ -176,6 +178,7 @@ void Tile::drawS1() {
 
 // Scene 2
 //=====================================
+// boid about
 
 void Tile::setupS2() {
   // setup position

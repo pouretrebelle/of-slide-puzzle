@@ -16,6 +16,7 @@ public:
 
   // Scene 0
   //===================================
+  // solve puzzle
 
   ofImage image;
   bool moving = false;
@@ -32,6 +33,7 @@ public:
 
   // Scene 1
   //===================================
+  // reduce to dots
 
   int tileSizeAnimFrames;
   float dotSize;
@@ -41,6 +43,7 @@ public:
 
   // Scene 2
   //===================================
+  // boid about
 
   ofVec2f pos;
   ofVec2f vel;
