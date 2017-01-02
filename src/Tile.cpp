@@ -163,11 +163,6 @@ void Tile::updateBoids(int frameCounter) {
 
   // update position
   pos += clampedVel;
-
-  // so that ofApp can update targetColor
-  updateImageSometimes(frameCounter);
-  // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
 }
 
 // Draw Square/Circle hybrid - scene 3
@@ -309,6 +304,11 @@ void Tile::updateS2(int frameCounter) {
     speedMax += speedMaxIncrement;
   }
   updateBoids(frameCounter);
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
 }
 
 void Tile::drawS2() {
@@ -361,6 +361,11 @@ void Tile::updateS3(int frameCounter) {
   // lerp avoidance distance towards dot size
   // to encourage biggest dots possible
   avoidanceDist = ofLerp(avoidanceDist, dotSize+gutter*0.5, avoidanceDistIncrement);
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
 }
 
 void Tile::drawS3() {
@@ -422,6 +427,11 @@ void Tile::updateS4(int frameCounter) {
     pos.x = ofLerp(pos.x, posTarget.x, 0.1);
     pos.y = ofLerp(pos.y, posTarget.y, 0.1);
   }
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
 }
 
 void Tile::drawS4() {
