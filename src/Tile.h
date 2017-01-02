@@ -87,6 +87,15 @@ public:
   void drawS3();
 
 
+  // Scene 4
+  //===================================
+  // reform grid
+
+  void setupS4();
+  void updateS4(int frameCounter);
+  void drawS4();
+
+
   // Helper Functions
   //===================================
 

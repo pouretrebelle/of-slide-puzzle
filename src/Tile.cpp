@@ -22,6 +22,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
   transitions[1] = transitions[0] + 3; // ~35 seconds
   transitions[2] = 60 + (initialX + initialY) * 1; // 60-75 seconds
+  transitions[3] = 90 + (initialX + initialY) * 1; // 90-105 seconds
 
   // Scene 0
   //-----------------------------------
@@ -75,6 +76,12 @@ void Tile::update(int frameCounter, float secondsElapsed) {
     curFrame = 0;
     setupS3();
   }
+  else if (secondsElapsed > transitions[3] && scene < 4) {
+    // scene 4
+    scene = 4;
+    curFrame = 0;
+    setupS4();
+  }
 
   // update scene
   switch (scene) {
@@ -82,6 +89,7 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   case 1: updateS1(frameCounter); break;
   case 2: updateS2(frameCounter); break;
   case 3: updateS3(frameCounter); break;
+  case 4: updateS4(frameCounter); break;
   }
 }
 
@@ -96,6 +104,7 @@ void Tile::draw() {
   case 1: drawS1(); break;
   case 2: drawS2(); break;
   case 3: drawS3(); break;
+  case 4: drawS4(); break;
   }
 }
 
@@ -371,6 +380,20 @@ void Tile::drawS3() {
 
   drawSquircle(dotSize*0.5, squircleness);
   ofPopMatrix();
+}
+
+
+// Scene 4
+//=====================================
+// reform grid
+
+void Tile::setupS4() {
+}
+
+void Tile::updateS4(int frameCounter) {
+}
+
+void Tile::drawS4() {
 }
 
 
