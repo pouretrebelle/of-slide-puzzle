@@ -12,6 +12,7 @@ void ofApp::setup(){
   secondsElapsedLastMoved = 0;
   frameCounter = 0;
 
+
   // Scene 0
   //-----------------------------------
 
@@ -51,6 +52,17 @@ void ofApp::setup(){
   // initialise the first x moves and the looper
   initialiseMoves(initialMoves);
   loopBack = true;
+
+
+  // Scene 2
+  //-----------------------------------
+
+  avoidanceDist = 40;
+  avoidanceScalar = 0.01;
+  cohesionDist = 80;
+  cohesionScalar = 0.005;
+  alignDist = 60;
+  alignScalar = 0.01;
 }
 
 
@@ -134,6 +146,61 @@ void ofApp::updateTile(int i) {
     tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
     tileImage.cropFrom(image, tiles[i].initialX*tileW, tiles[i].initialY*tileH, tileW - tileGutter, tileH - tileGutter);
     tiles[i].image.clone(tileImage);
+  }
+
+  // Scene 2
+  //-----------------------------------
+  if (tiles[i].scene == 2) {
+
+    ofVec2f pos = tiles[i].pos;
+    ofVec2f seperate = ofVec2f(0, 0);
+    ofVec2f cohesion = ofVec2f(0, 0);
+    ofVec2f align = ofVec2f(0, 0);
+    int numNeighboursCohesion = 0;
+    int numNeighboursAlign = 0;
+
+    // loop through others
+    for (int j = 0; j < tilesY*tilesX; j++) {
+      if (tiles[j].scene == 2 && j != i) {
+        float dist = pos.distance(tiles[j].pos);
+
+        // Seperate
+        if (dist < avoidanceDist) {
+          seperate -= (tiles[j].pos - pos);
+        }
+
+        // Cohesion
+        if (dist < cohesionDist) {
+          cohesion += tiles[j].pos;
+          numNeighboursCohesion++;
+        }
+
+        // Align
+        if (dist < alignDist) {
+          align += tiles[j].vel;
+          numNeighboursAlign++;
+        }
+      }
+    }
+
+    // Seperate
+    seperate *= avoidanceScalar;
+    tiles[i].vel += seperate;
+
+    // Cohesion
+    if (numNeighboursCohesion > 0) {
+      cohesion /= numNeighboursCohesion;
+      cohesion -= pos;
+      cohesion *= cohesionScalar;
+      tiles[i].vel += cohesion;
+    }
+
+    // Align
+    if (numNeighboursAlign > 0) {
+      align /= numNeighboursAlign;
+      align *= alignScalar;
+      tiles[i].vel += align;
+    }
   }
 }
 

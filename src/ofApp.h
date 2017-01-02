@@ -39,6 +39,16 @@ class ofApp : public ofBaseApp{
     void initialiseMoves(int count);
 
 
+    // Scene 2
+    //=================================
+    float avoidanceDist;
+    float avoidanceScalar;
+    float cohesionDist;
+    float cohesionScalar;
+    float alignDist;
+    float alignScalar;
+
+
     // Interaction
     //===================================
 

@@ -46,6 +46,7 @@ public:
   ofVec2f vel;
   ofColor color;
   float speed;
+  float speedMax;
   void setupS2();
   void updateS2(int frameCounter);
   void drawS2();

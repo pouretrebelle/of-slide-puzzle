@@ -19,7 +19,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // first transition is determined by secondsBetweenMoves and initialMoves
   // in ofApp.cpp, and the initial position of
-  transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.2;
+  transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3;
   transitions[1] = transitions[0] + 3;
 
   // Scene 0
@@ -28,12 +28,13 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // Scene 1
   //-----------------------------------
-  tileSizeAnimFrames = 20;
+  tileSizeAnimFrames = 30;
   dotSize = 10;
 
   // Scene 2
   //-----------------------------------
   speed = 5;
+  speedMax = 6;
 }
 
 
@@ -186,6 +187,20 @@ void Tile::setupS2() {
 }
 
 void Tile::updateS2(int frameCounter) {
+  // bounce off borders
+  if (pos.x < 0 || pos.x > ofGetWindowWidth()) {
+    vel.x *= -1;
+  }
+  if (pos.y < 0 || pos.y > ofGetWindowHeight()) {
+    vel.y *= -1;
+  }
+
+  // clamp speed
+  if (vel.length() > speedMax) {
+    vel.scale(speedMax);
+  }
+
+  // update position
   pos += vel;
 }
 
