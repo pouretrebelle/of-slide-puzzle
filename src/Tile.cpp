@@ -23,7 +23,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
   transitions[2] = 50 + (initialX + initialY) * 1.5; // 50-70 seconds
   transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
-  transitions[4] = 120 + (initialX + initialY) * 1; // 120 - 130 seconds
+  transitions[4] = 110 + (initialX + initialY) * 1; // 110 - 125 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
@@ -342,7 +342,7 @@ void Tile::drawS2() {
 
 void Tile::setupS3() {
   squircleness = 0;
-  squirclenessIncrement = 0.02;
+  squirclenessIncrement = 0.01;
   dotSizeIncrement = 0;
 
   // up avoidance scalar to avoid overlapping
@@ -454,12 +454,24 @@ void Tile::drawS4() {
 // morph into squares with images
 
 void Tile::setupS5() {
+  squircleness = 1;
+  squirclenessIncrement = -0.01;
 }
 
 void Tile::updateS5(int frameCounter) {
+  if (squircleness > 0) {
+    squircleness += squirclenessIncrement;
+  }
 }
 
 void Tile::drawS5() {
+  ofPushMatrix();
+
+  // translate to position
+  ofTranslate(pos.x, pos.y);
+
+  drawSquircle((w-gutter)*0.5, squircleness);
+  ofPopMatrix();
 }
 
 
