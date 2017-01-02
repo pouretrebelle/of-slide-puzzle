@@ -37,6 +37,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   speedMax = 0;
   speedMaxIncrement = 0.05;
   speedMaxLimit = 4;
+  colorLerpScalar = 0.1;
 }
 
 
@@ -94,6 +95,18 @@ float Tile::easeInCubic(float t, float b, float c, float d) {
   return c*(t /= d)*t*t + b;
 }
 
+void Tile::updateImageSometimes(int frameCounter) {
+  // update tile based on its initial position
+  // creates diagonal sequential update pattern
+  // based on 6*8 grid
+  if (frameCounter % (6 + 8) == (initialX + initialY - 1)) {
+    updateImage = true;
+  }
+  else {
+    updateImage = false;
+  }
+}
+
 
 // Scene 0
 //=====================================
@@ -106,18 +119,10 @@ void Tile::updateS0(int frameCounter) {
     if (curFrame >= tileMoveAnimFrames) moving = false;
   }
 
-  // update tile based on its initial position
-  // creates diagonal sequential update pattern
-  // based on 6*8 grid
-  if (frameCounter % (6+8) == (initialX + initialY - 1)) {
-    updateImage = true;
-  }
-  // update all of them for the first 5 frames
+  updateImageSometimes(frameCounter);
+  // apart from first 5 frames
   // to assure there is an image for each tile
-  else if (frameCounter > 5) {
-    updateImage = false;
-  }
-  else {
+  if (frameCounter < 5) {
     updateImage = true;
   }
 }
@@ -151,6 +156,7 @@ void Tile::move(ofVec2f dir, bool easing) {
 //=====================================
 
 void Tile::updateS1(int frameCounter) {
+  updateImageSometimes(frameCounter);
 }
 
 void Tile::drawS1() {
@@ -172,15 +178,13 @@ void Tile::drawS1() {
 //=====================================
 
 void Tile::setupS2() {
-  // stop updating image from webcam
-  updateImage = false;
-
   // setup position
   pos.x = x*w + (w-gutter)*0.5;
   pos.y = y*h + (h-gutter)*0.5;
 
   // get color from image
-  color = image.getColor(w*0.5, h*0.5);
+  // targetColor is updated in ofApp's updateTile()
+  color = targetColor;
 
   // set velocity with speed
   // randomise direction to each diagonal
@@ -210,6 +214,11 @@ void Tile::updateS2(int frameCounter) {
 
   // update position
   pos += clampedVel;
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
 }
 
 void Tile::drawS2() {

@@ -45,6 +45,8 @@ public:
   ofVec2f pos;
   ofVec2f vel;
   ofColor color;
+  ofColor targetColor;
+  float colorLerpScalar;
   float speed;
   float speedMax;
   float speedMaxIncrement;
@@ -59,6 +61,7 @@ public:
 
   float easeOutCubic(float t, float b, float c, float d);
   float easeInCubic(float t, float b, float c, float d);
+  void updateImageSometimes(int frameCounter);
 
 private:
 

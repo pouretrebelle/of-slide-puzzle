@@ -146,6 +146,7 @@ void ofApp::updateTile(int i) {
     tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
     tileImage.cropFrom(image, tiles[i].initialX*tileW, tiles[i].initialY*tileH, tileW - tileGutter, tileH - tileGutter);
     tiles[i].image.clone(tileImage);
+    tiles[i].targetColor = tileImage.getColor(tileW*0.5, tileH*0.5);
   }
 
   // Scene 2
