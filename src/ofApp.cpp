@@ -1,6 +1,8 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
+// Setup
+//=====================================
+
 void ofApp::setup(){
   ofSetFrameRate(60);
   ofBackground(255);
@@ -49,7 +51,10 @@ void ofApp::setup(){
   loopBack = true;
 }
 
-//--------------------------------------------------------------
+
+// Global Update
+//=====================================
+
 void ofApp::update(){
   // set seconds elapsed
   secondsElapsed = ofGetElapsedTimeMillis() * 0.001;
@@ -107,7 +112,10 @@ void ofApp::update(){
   }
 }
 
-//--------------------------------------------------------------
+
+// Global Draw
+//=====================================
+
 void ofApp::draw(){
   ofTranslate(tileGutter, tileGutter);
 
@@ -119,6 +127,10 @@ void ofApp::draw(){
   // draw progress through animation in seconds
   ofDrawBitmapString(ofToString(secondsElapsed), 20, 20);
 }
+
+
+// Helper Functions
+//=====================================
 
 void ofApp::move(ofVec2f direction = ofVec2f(0, 0)) {
   bool easing = true;
@@ -171,6 +183,13 @@ void ofApp::initialiseMoves(int count) {
   }
 }
 
+
+// Interaction
+//=====================================
+
+// Mouse and Key presses
+//-------------------------------------
+
 void ofApp::mousePressed(int x, int y, int button) {
   move(getADirection());
 }
@@ -179,7 +198,10 @@ void ofApp::keyPressed(int key) {
     loopBack = !loopBack;
   }
 }
-//--------------------------------------------------------------
+
+// Window Resize
+//-------------------------------------
+
 void ofApp::windowResized(int w, int h){
   windowW = ofGetWidth();
   windowH = ofGetHeight();

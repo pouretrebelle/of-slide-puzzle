@@ -1,5 +1,9 @@
 #include "Tile.h"
 
+
+// Constructor
+//=====================================
+
 Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   x = _x;
   y = _y;
@@ -22,22 +26,9 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[1] = transitions[0] + 5;
 }
 
-void Tile::move(ofVec2f dir, bool easing) {
-  // if easing is true initialise moving and set start and end
-  if (easing) {
-    moving = true;
-    startX = x;
-    startY = y;
-    endX = x - dir.x;
-    endY = y - dir.y;
-    curFrame = 0;
-  }
-  // otherwise jump to new position
-  else {
-    x -= dir.x;
-    y -= dir.y;
-  }
-}
+
+// Global Update
+//=====================================
 
 void Tile::update(int frameCounter, float secondsElapsed) {
   // increment current frame
@@ -54,6 +45,34 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   case 0: updateS0(frameCounter); break;
   }
 }
+
+
+// Global Draw
+//=====================================
+
+void Tile::draw() {
+  // draw scene
+  switch (scene) {
+  case 0: drawS0(); break;
+  case 1: drawS1(); break;
+  }
+}
+
+
+// Helper Functions
+//=====================================
+
+// functions borrowed from https://github.com/jesusgollonet/ofpennereasing
+float Tile::easeOutCubic(float t, float b, float c, float d) {
+  return c*((t = t / d - 1)*t*t + 1) + b;
+}
+float Tile::easeInCubic(float t, float b, float c, float d) {
+  return c*(t /= d)*t*t + b;
+}
+
+
+// Scene 0
+//=====================================
 
 void Tile::updateS0(int frameCounter) {
   if (moving) {
@@ -79,20 +98,33 @@ void Tile::updateS0(int frameCounter) {
   }
 }
 
-void Tile::draw() {
-  // draw scene
-  switch (scene) {
-    case 0: drawS0(); break;
-    case 1: drawS1(); break;
-  }
-}
-
 void Tile::drawS0() {
   // check to make sure the image has a texture
   if (image.getWidth() != 0) {
     image.draw(x*w, y*h);
   }
 }
+
+void Tile::move(ofVec2f dir, bool easing) {
+  // if easing is true initialise moving and set start and end
+  if (easing) {
+    moving = true;
+    startX = x;
+    startY = y;
+    endX = x - dir.x;
+    endY = y - dir.y;
+    curFrame = 0;
+  }
+  // otherwise jump to new position
+  else {
+    x -= dir.x;
+    y -= dir.y;
+  }
+}
+
+
+// Scene 1
+//=====================================
 
 void Tile::drawS1() {
   float dotWidth = easeInCubic(curFrame, w-gutter, -w+gutter+dotSize, tileSizeAnimFrames);
@@ -105,12 +137,4 @@ void Tile::drawS1() {
   float dotX = (w - dotWidth) * 0.5;
   float dotY = (h - dotHeight) * 0.5;
   image.drawSubsection(x*w + dotX, y*h + dotY, dotWidth, dotHeight, dotX, dotY);
-}
-
-// functions borrowed from https://github.com/jesusgollonet/ofpennereasing
-float Tile::easeOutCubic(float t, float b, float c, float d) {
-  return c*((t = t / d - 1)*t*t + 1) + b;
-}
-float Tile::easeInCubic(float t, float b, float c, float d) {
-  return c*(t /= d)*t*t + b;
 }
