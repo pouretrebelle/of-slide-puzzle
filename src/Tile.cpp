@@ -133,22 +133,26 @@ void Tile::updateImageSometimes(int frameCounter) {
 //-------------------------------------
 void Tile::updateBoids(int frameCounter) {
   // bounce off borders
-  // and push position to stop getting stuck inside edge
-  if (pos.x < dotSize) {
-    // top
-    vel.x *= -1;
-  }
-  else if (pos.x > ofGetWindowWidth()-dotSize) {
-    // bottom
-    vel.x *= -1;
-  }
-  if (pos.y < dotSize) {
+  // global app draw translates by (gutter, gutter) so we have to allow for that
+  if (pos.x < dotSize*0.5 - gutter) {
     // left
-    vel.y *= -1;
+    vel.x += 5;
+    pos.x = dotSize*0.5 - gutter;
   }
-  else if (pos.y > ofGetWindowHeight() - dotSize) {
+  else if (pos.x > ofGetWindowWidth()-dotSize*0.5 - gutter) {
     // right
-    vel.y *= -1;
+    vel.x -= 5;
+    pos.x = ofGetWindowWidth()-dotSize*0.5 - gutter;
+  }
+  if (pos.y < dotSize*0.5 - gutter) {
+    // top
+    vel.y += 5;
+    pos.y = dotSize*0.5 - gutter;
+  }
+  else if (pos.y > ofGetWindowHeight()-dotSize*0.5 - gutter) {
+    // bottom
+    vel.y -= 5;
+    pos.y = ofGetWindowHeight()-dotSize*0.5 - gutter;
   }
 
   // clamp velocity
@@ -159,11 +163,6 @@ void Tile::updateBoids(int frameCounter) {
 
   // update position
   pos += clampedVel;
-
-  // so that ofApp can update targetColor
-  updateImageSometimes(frameCounter);
-  // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
 
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
