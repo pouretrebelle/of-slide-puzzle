@@ -35,14 +35,24 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   curFrame++;
 
   // set scene
+  //-------------------------------------
   if (secondsElapsed > transitions[0] && scene < 1) {
+    // scene 1
     scene = 1;
     curFrame = 0;
+  }
+  else if (secondsElapsed > transitions[1] && scene < 2) {
+    // scene 2
+    scene = 2;
+    curFrame = 0;
+    setupS2();
   }
 
   // update scene
   switch (scene) {
   case 0: updateS0(frameCounter); break;
+  case 1: updateS1(frameCounter); break;
+  case 2: updateS2(frameCounter); break;
   }
 }
 
@@ -55,6 +65,7 @@ void Tile::draw() {
   switch (scene) {
   case 0: drawS0(); break;
   case 1: drawS1(); break;
+  case 2: drawS2(); break;
   }
 }
 
@@ -126,6 +137,9 @@ void Tile::move(ofVec2f dir, bool easing) {
 // Scene 1
 //=====================================
 
+void Tile::updateS1(int frameCounter) {
+}
+
 void Tile::drawS1() {
   float dotWidth = easeInCubic(curFrame, w-gutter, -w+gutter+dotSize, tileSizeAnimFrames);
   float dotHeight = easeInCubic(curFrame, h-gutter, -h+gutter+dotSize, tileSizeAnimFrames);
@@ -137,4 +151,18 @@ void Tile::drawS1() {
   float dotX = (w - dotWidth) * 0.5;
   float dotY = (h - dotHeight) * 0.5;
   image.drawSubsection(x*w + dotX, y*h + dotY, dotWidth, dotHeight, dotX, dotY);
+}
+
+
+
+// Scene 2
+//=====================================
+
+void Tile::setupS2() {
+}
+
+void Tile::updateS2(int frameCounter) {
+}
+
+void Tile::drawS2() {
 }
