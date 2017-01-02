@@ -12,9 +12,6 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   w = _w;
   h = _h;
   gutter = _gutter;
-  dotSize = 10;
-  tileMoveAnimFrames = 10;
-  tileSizeAnimFrames = 20;
 
   // initialise scene and transition array
   scene = 0;
@@ -23,7 +20,20 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   // first transition is determined by secondsBetweenMoves and initialMoves
   // in ofApp.cpp, and the initial position of
   transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.2;
-  transitions[1] = transitions[0] + 5;
+  transitions[1] = transitions[0] + 3;
+
+  // Scene 0
+  //-----------------------------------
+  tileMoveAnimFrames = 10;
+
+  // Scene 1
+  //-----------------------------------
+  tileSizeAnimFrames = 20;
+  dotSize = 10;
+
+  // Scene 2
+  //-----------------------------------
+  speed = 5;
 }
 
 
@@ -148,8 +158,8 @@ void Tile::drawS1() {
     dotWidth = dotSize;
     dotHeight = dotSize;
   }
-  float dotX = (w - dotWidth) * 0.5;
-  float dotY = (h - dotHeight) * 0.5;
+  float dotX = (w - dotWidth - gutter) * 0.5;
+  float dotY = (h - dotHeight - gutter) * 0.5;
   image.drawSubsection(x*w + dotX, y*h + dotY, dotWidth, dotHeight, dotX, dotY);
 }
 
@@ -159,10 +169,37 @@ void Tile::drawS1() {
 //=====================================
 
 void Tile::setupS2() {
+  // stop updating image from webcam
+  updateImage = false;
+
+  // setup position
+  pos.x = x*w + (w-gutter)*0.5;
+  pos.y = y*h + (h-gutter)*0.5;
+
+  // get color from image
+  color = image.getColor(w*0.5, h*0.5);
+
+  // set velocity with speed
+  // randomise direction to each diagonal
+  vel = ofVec2f(speed / sqrt(2));
+  vel.rotate(90 * floor(ofRandom(4)));
 }
 
 void Tile::updateS2(int frameCounter) {
+  pos += vel;
 }
 
 void Tile::drawS2() {
+  ofSetColor(color);
+  ofPushMatrix();
+
+  // translate to position
+  ofTranslate(pos.x, pos.y);
+
+  // rotate context to velocity minus 45deg
+  // so corner of rectangle always points forward
+  ofRotate(vel.angle(ofVec2f(-1, 1)));
+
+  ofDrawRectangle(-dotSize*0.5, -dotSize*0.5, dotSize, dotSize);
+  ofPopMatrix();
 }

@@ -41,6 +41,7 @@ public:
   ofVec2f pos;
   ofVec2f vel;
   ofColor color;
+  float speed;
 
   float easeOutCubic(float t, float b, float c, float d);
   float easeInCubic(float t, float b, float c, float d);
