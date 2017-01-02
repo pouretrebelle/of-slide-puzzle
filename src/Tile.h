@@ -101,6 +101,15 @@ public:
   void drawS4();
 
 
+  // Scene 5
+  //===================================
+  // morph into squares with images
+
+  void setupS5();
+  void updateS5(int frameCounter);
+  void drawS5();
+
+
   // Helper Functions
   //===================================
 

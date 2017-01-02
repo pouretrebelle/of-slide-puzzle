@@ -15,7 +15,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // initialise scene and transition array
   scene = 0;
-  transitions = new float[2];
+  transitions = new float[5];
 
   // first transition is determined by secondsBetweenMoves and initialMoves
   // in ofApp.cpp, and it initial tile position
@@ -23,6 +23,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
   transitions[2] = 50 + (initialX + initialY) * 1.5; // 50-70 seconds
   transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
+  transitions[4] = 120 + (initialX + initialY) * 1; // 120 - 130 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
@@ -85,6 +86,12 @@ void Tile::update(int frameCounter, float secondsElapsed) {
     curFrame = 0;
     setupS4();
   }
+  else if (secondsElapsed > transitions[4] && scene < 5) {
+    // scene 5
+    scene = 5;
+    curFrame = 0;
+    setupS5();
+  }
 
   // update scene
   switch (scene) {
@@ -93,6 +100,7 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   case 2: updateS2(frameCounter); break;
   case 3: updateS3(frameCounter); break;
   case 4: updateS4(frameCounter); break;
+  case 5: updateS5(frameCounter); break;
   }
 }
 
@@ -108,6 +116,7 @@ void Tile::draw() {
   case 2: drawS2(); break;
   case 3: drawS3(); break;
   case 4: drawS4(); break;
+  case 5: drawS5(); break;
   }
 }
 
@@ -437,6 +446,20 @@ void Tile::updateS4(int frameCounter) {
 void Tile::drawS4() {
   ofSetColor(color);
   ofDrawCircle(pos.x, pos.y, dotSize*0.5);
+}
+
+
+// Scene 5
+//=====================================
+// morph into squares with images
+
+void Tile::setupS5() {
+}
+
+void Tile::updateS5(int frameCounter) {
+}
+
+void Tile::drawS5() {
 }
 
 
