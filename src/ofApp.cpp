@@ -106,7 +106,7 @@ void ofApp::update(){
 
   // reinitialise moves after a minute for Scene 4
   if (secondsElapsed > 60 && !reInitialised) {
-    initialiseMoves(initialMoves);
+    initialiseMoves(200);
     reInitialised = true;
   }
 

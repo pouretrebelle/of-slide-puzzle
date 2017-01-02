@@ -18,11 +18,11 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions = new float[2];
 
   // first transition is determined by secondsBetweenMoves and initialMoves
-  // in ofApp.cpp, and the initial position of
+  // in ofApp.cpp, and it initial tile position
   transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
-  transitions[1] = transitions[0] + 3; // ~35 seconds
-  transitions[2] = 60 + (initialX + initialY) * 1; // 60-75 seconds
-  transitions[3] = 90 + (initialX + initialY) * 2; // 90-105 seconds
+  transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
+  transitions[2] = 50 + (initialX + initialY) * 1.5; // 50-70 seconds
+  transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
@@ -34,15 +34,15 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   // Scene 1
   //-----------------------------------
   tileSizeAnimFrames = 30;
-  dotSize = 10;
+  dotSize = 14;
   dotSizeTarget = dotSize;
 
   // Scene 2
   //-----------------------------------
   speed = 3;
   speedMax = 0;
-  speedMaxIncrement = 0.05;
-  speedMaxLimit = 4;
+  speedMaxIncrement = 0.1;
+  speedMaxLimit = 6;
   colorLerpScalar = 0.1;
   avoidanceDist = 40;
   avoidanceScalar = 0.01;
@@ -354,15 +354,9 @@ void Tile::updateS3(int frameCounter) {
     dotSizeIncrement += 0.005;
   }
 
-  // lerp dot size towards target if it's smaller than the target
-  if (dotSize < dotSizeTarget) {
-    dotSize = ofLerp(dotSize, dotSizeTarget, dotSizeIncrement);
-  }
-  // otherwise jump to target
-  // to avoid overlap
-  else {
-    dotSize = dotSizeTarget;
-  }
+  // lerp towards target, make sure it's > 20
+  dotSizeTarget = (dotSizeTarget < 20) ? 20 : dotSizeTarget;
+  dotSize = ofLerp(dotSize, dotSizeTarget, dotSizeIncrement);
 
   // lerp avoidance distance towards dot size
   // to encourage biggest dots possible
