@@ -19,7 +19,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // first transition is determined by secondsBetweenMoves and initialMoves
   // in ofApp.cpp, and it initial tile position
-  transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
+  transitions[0] = 100 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
   transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
   transitions[2] = 50 + (initialX + initialY) * 2; // 50-80 seconds
   transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
@@ -102,7 +102,7 @@ void Tile::update(int frameCounter, float secondsElapsed) {
 
   // update scene
   switch (scene) {
-  case 0: updateS0(frameCounter); break;
+  case 0: updateS0(frameCounter, secondsElapsed); break;
   case 1: updateS1(frameCounter); break;
   case 2: updateS2(frameCounter); break;
   case 3: updateS3(frameCounter); break;
@@ -133,7 +133,7 @@ void Tile::draw() {
 // Shared Functions
 //=====================================
 
-// Image Updates - every scene
+// Image Updates - every scene but 1
 //-------------------------------------
 void Tile::updateImageSometimes(int frameCounter, int often = 20) {
   // update tile based on its initial position
@@ -234,7 +234,7 @@ ofPath Tile::pathSquircle(float radius, float t) {
 //=====================================
 // solve puzzle
 
-void Tile::updateS0(int frameCounter) {
+void Tile::updateS0(int frameCounter, float secondsElapsed = 0) {
   if (moving) {
     x = easeOutCubic(curFrame, startX, endX - startX, tileMoveAnimFrames);
     y = easeOutCubic(curFrame, startY, endY - startY, tileMoveAnimFrames);
@@ -248,6 +248,11 @@ void Tile::updateS0(int frameCounter) {
   // to assure there is an image for each tile
   if (frameCounter < 5) {
     updateImage = true;
+  }
+  // if some tiles have moved onto scene 2 we don't want to update the image
+  // my webcam makes it way darker for some reason when this is active
+  if (secondsElapsed > 30) {
+    updateImage = false;
   }
 }
 
