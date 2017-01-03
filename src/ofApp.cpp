@@ -13,6 +13,7 @@ void ofApp::setup(){
   secondsElapsedLastMoved = 0;
   frameCounter = 0;
 
+  useWebcam = true;
 
   // Scene 0
   //-----------------------------------
@@ -51,9 +52,16 @@ void ofApp::setup(){
   }
 
   // set up the camera
-  vidGrabber.setDeviceID(0);
-  vidGrabber.setDesiredFrameRate(1);
-  vidGrabber.initGrabber(640, 480);
+  if (useWebcam) {
+    vidGrabber.setDeviceID(0);
+    vidGrabber.setDesiredFrameRate(1);
+    vidGrabber.initGrabber(640, 480);
+    vidGrabber.videoSettings();
+  }
+  else {
+    vidPlayer.loadMovie("first.mp4");
+    vidPlayer.play();
+  }
 
   // initialise the first x moves and the looper
   initialiseMoves(initialMoves);
@@ -77,14 +85,27 @@ void ofApp::update(){
   frameCounter++;
 
   // update the image frame
-  vidGrabber.update();
-  if (vidGrabber.isFrameNew()) {
-    ofImage newImage;
-    newImage.allocate(640, 480, OF_IMAGE_COLOR);
-    newImage.setFromPixels(vidGrabber.getPixels());
-    newImage.mirror(false, true);
-    newImage.resize(windowW, windowH);
-    image = newImage;
+  if (useWebcam) {
+    vidGrabber.update();
+    if (vidGrabber.isFrameNew()) {
+      ofImage newImage;
+      newImage.allocate(640, 480, OF_IMAGE_COLOR);
+      newImage.setFromPixels(vidGrabber.getPixels());
+      newImage.mirror(false, true);
+      newImage.resize(windowW, windowH);
+      image = newImage;
+    }
+  }
+  else {
+    vidPlayer.update();
+    if (vidPlayer.isFrameNew()) {
+      ofImage newImage;
+      newImage.allocate(960, 720, OF_IMAGE_COLOR);
+      newImage.setFromPixels(vidPlayer.getPixels());
+      newImage.mirror(false, true);
+      newImage.resize(windowW, windowH);
+      image = newImage;
+    }
   }
 
   // undo existing moves

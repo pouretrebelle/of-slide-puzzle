@@ -26,6 +26,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[4] = 110 + (initialX + initialY) * 1; // 110 - 125 seconds
   transitions[5] = 125; // 125 seconds
 
+
   // controls whether ofApp.cpp compares tiles
   boiding = false;
 
