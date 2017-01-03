@@ -135,11 +135,12 @@ void Tile::draw() {
 
 // Image Updates - every scene
 //-------------------------------------
-void Tile::updateImageSometimes(int frameCounter) {
+void Tile::updateImageSometimes(int frameCounter, int often = 20) {
   // update tile based on its initial position
   // creates diagonal sequential update pattern
-  // based on 6*8 grid
-  if (frameCounter % (6 + 8) == (initialX + initialY - 1)) {
+  // often is how many frames per update
+  // default to 20 for dot colour update
+  if ((frameCounter - initialX + initialY) % often == 0) {
     updateImage = true;
   }
   else {
@@ -241,7 +242,8 @@ void Tile::updateS0(int frameCounter) {
     if (curFrame >= tileMoveAnimFrames) moving = false;
   }
 
-  updateImageSometimes(frameCounter);
+  // update image every 5 frames
+  updateImageSometimes(frameCounter, 5);
   // apart from first 5 frames
   // to assure there is an image for each tile
   if (frameCounter < 5) {

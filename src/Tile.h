@@ -17,7 +17,7 @@ public:
   // Shared Functions
   //===================================
 
-  void updateImageSometimes(int frameCounter);
+  void updateImageSometimes(int frameCounter, int often);
   void updateBoids(int frameCounter);
   ofPath pathSquircle(float radius, float t);
 
