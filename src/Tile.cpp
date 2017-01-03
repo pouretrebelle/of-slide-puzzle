@@ -21,7 +21,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   // in ofApp.cpp, and it initial tile position
   transitions[0] = 101 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
   transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
-  transitions[2] = 50 + (initialX + initialY) * 1.5; // 50-70 seconds
+  transitions[2] = 50 + (initialX + initialY) * 2; // 50-80 seconds
   transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
   transitions[4] = 110 + (initialX + initialY) * 1; // 110 - 125 seconds
   transitions[5] = 125; // 125 seconds
