@@ -83,6 +83,7 @@ public:
   float dotSizeTarget;
   float dotSizeIncrement;
   float avoidanceDistIncrement;
+  ofPath squircle;
   void setupS3();
   void updateS3(int frameCounter);
   void drawS3();
@@ -105,6 +106,8 @@ public:
   //===================================
   // morph into squares with images
 
+  ofFbo squircleMask;
+  ofTexture imageMasked;
   void setupS5();
   void updateS5(int frameCounter);
   void drawS5();

@@ -174,7 +174,7 @@ void Tile::updateBoids(int frameCounter) {
   pos += clampedVel;
 }
 
-// Draw Square/Circle hybrid - scene 3
+// Draw Square/Circle hybrid - scene 3+5
 //-------------------------------------
 // from example in https://forum.processing.org/two/discussion/1941/transform-a-square-into-a-circle
 ofPath Tile::pathSquircle(float radius, float t) {
@@ -184,8 +184,8 @@ ofPath Tile::pathSquircle(float radius, float t) {
   ofPath squircle;
 
   for (float angle = DEG_TO_RAD*5; angle < TWO_PI; angle += DEG_TO_RAD*10) {
-    circleX = radius*cos(angle);
-    circleY = radius*sin(angle);
+    circleX = radius + radius*cos(angle);
+    circleY = radius + radius*sin(angle);
 
     if ((angle > DEG_TO_RAD*225) && (angle <= DEG_TO_RAD*315)) {
       // top side
@@ -211,6 +211,8 @@ ofPath Tile::pathSquircle(float radius, float t) {
       squareX = radius;
       squareY = squareRadius*sin(angle);
     }
+    squareX += radius;
+    squareY += radius;
     squircle.lineTo(ofLerp(squareX, circleX, t), ofLerp(squareY, circleY, t));
   }
   squircle.close();
@@ -341,7 +343,7 @@ void Tile::drawS2() {
 
 void Tile::setupS3() {
   squircleness = 0;
-  squirclenessIncrement = 0.01;
+  squirclenessIncrement = 0.02;
   dotSizeIncrement = 0;
 
   // up avoidance scalar to avoid overlapping
@@ -386,7 +388,10 @@ void Tile::drawS3() {
   // so corner of rectangle always points forward
   ofRotate(ofVec2f(1, -1).angle(vel));
 
-  ofPath squircle = pathSquircle(dotSize*0.5, squircleness);
+  // translate again because squircles are drawn from the top left
+  ofTranslate(-dotSize*0.5, -dotSize*0.5);
+
+  squircle = pathSquircle(dotSize*0.5, squircleness);
   squircle.setFillColor(color);
   squircle.draw();
 
@@ -457,24 +462,47 @@ void Tile::drawS4() {
 
 void Tile::setupS5() {
   squircleness = 1;
-  squirclenessIncrement = -0.01;
+  squirclenessIncrement = -0.02;
+
+  squircleMask.allocate(w, h, GL_RGBA);
 }
 
 void Tile::updateS5(int frameCounter) {
   if (squircleness > 0) {
     squircleness += squirclenessIncrement;
   }
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
+
+  // make squircle path and draw it into masked image
+  squircle = pathSquircle(dotSize*0.5, squircleness);
+  squircleMask.begin();
+  squircle.setFillColor(255);
+  squircle.draw();
+  squircleMask.end();
+
+  // mask out image
+  imageMasked = image.getTexture();
+  imageMasked.setAlphaMask(squircleMask.getTexture());
 }
 
 void Tile::drawS5() {
   ofPushMatrix();
 
-  // translate to position
-  ofTranslate(pos.x, pos.y);
+  // draw masked image
+  imageMasked.draw(x*w, y*h);
 
-  ofPath squircle = pathSquircle(dotSize*0.5, squircleness);
-  squircle.setFillColor(color);
-  squircle.draw();
+  // if it's not square draw the squircle on top
+  // slowly reduce opacity
+  if (squircleness > 0) {
+    ofColor colorTrans = color;
+    colorTrans.a = squircleness * 255;
+    squircle.setFillColor(colorTrans);
+    squircle.draw(x*w, y*h);
+  }
 
   ofPopMatrix();
 }
