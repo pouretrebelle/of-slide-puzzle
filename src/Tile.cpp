@@ -69,6 +69,7 @@ void Tile::update(int frameCounter, float secondsElapsed) {
     // scene 1
     scene = 1;
     curFrame = 0;
+    setupS1();
   }
   else if (secondsElapsed > transitions[1] && scene < 2) {
     // scene 2
@@ -293,6 +294,12 @@ void Tile::move(ofVec2f dir, bool easing) {
 // Scene 1
 //=====================================
 // reduce to dots
+
+void Tile::setupS1() {
+  // make sure the x+y are positioned absolutely;
+  x = initialX;
+  y = initialY;
+}
 
 void Tile::updateS1(int frameCounter) {
 }

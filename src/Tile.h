@@ -45,8 +45,9 @@ public:
 
   int tileSizeAnimFrames;
   float dotSize;
-  void drawS1();
+  void setupS1();
   void updateS1(int frameCounter);
+  void drawS1();
 
 
   // Scene 2
