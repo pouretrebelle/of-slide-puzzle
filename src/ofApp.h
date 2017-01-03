@@ -39,10 +39,11 @@ class ofApp : public ofBaseApp{
     void initialiseMoves(int count);
 
 
-    // Scene 4
+    // Scene 4+6
     //=================================
 
-    bool reInitialised;
+    bool reinitialiseMoves;
+    bool reactivateLoopBack;
 
 
     // Interaction

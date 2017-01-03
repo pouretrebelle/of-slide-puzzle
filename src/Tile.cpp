@@ -525,9 +525,11 @@ void Tile::setupS6() {
 }
 
 void Tile::updateS6(int frameCounter) {
+  updateS0(frameCounter);
 }
 
 void Tile::drawS6() {
+  drawS0();
 }
 
 

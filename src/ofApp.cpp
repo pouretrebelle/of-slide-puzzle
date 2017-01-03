@@ -28,7 +28,8 @@ void ofApp::setup(){
 
   // Scene 4
   //-----------------------------------
-  reInitialised = false;
+  reinitialiseMoves = false;
+  reactivateLoopBack = false;
 
   // animation variables
   secondsBetweenMoves = 0.3;
@@ -104,10 +105,16 @@ void ofApp::update(){
     secondsElapsedLastMoved += secondsBetweenMoves;
   }
 
-  // reinitialise moves after a minute for Scene 4
-  if (secondsElapsed > 100 && !reInitialised) {
-    initialiseMoves(200);
-    reInitialised = true;
+  // reinitialise moves after Scene 3
+  if (secondsElapsed > 105 && !reinitialiseMoves) {
+    initialiseMoves(165);
+    reinitialiseMoves = true;
+  }
+
+  // reactivate loopBack for Scene 6
+  if (secondsElapsed > 125 && !reactivateLoopBack) {
+    loopBack = true;
+    reactivateLoopBack = true;
   }
 
   // call update on all the tiles
