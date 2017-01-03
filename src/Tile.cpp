@@ -259,14 +259,11 @@ void Tile::updateS0(int frameCounter, float secondsElapsed = 0) {
   if (frameCounter < 5) {
     updateImage = true;
   }
-  // if some tiles have moved onto scene 2 we don't want to update the image
-  // my webcam makes it way darker for some reason when this is active
-  if (secondsElapsed > 30) {
-    updateImage = false;
-  }
 }
 
 void Tile::drawS0() {
+  // reset color before drawing
+  ofSetColor(ofColor::white);
   // check to make sure the image has a texture
   if (image.getWidth() != 0) {
     image.draw(x*w, y*h);
@@ -305,6 +302,9 @@ void Tile::updateS1(int frameCounter) {
 }
 
 void Tile::drawS1() {
+  // reset color before drawing
+  ofSetColor(ofColor::white);
+
   float dotWidth = easeInCubic(curFrame, w-gutter, -w+gutter+dotSize, tileSizeAnimFrames);
   float dotHeight = easeInCubic(curFrame, h-gutter, -h+gutter+dotSize, tileSizeAnimFrames);
   // if the animation is complete clamp width and height
@@ -509,6 +509,9 @@ void Tile::updateS5(int frameCounter) {
 }
 
 void Tile::drawS5() {
+  // reset color before drawing
+  ofSetColor(ofColor::white);
+
   ofPushMatrix();
   ofTranslate(x*w, y*h);
 
@@ -536,6 +539,8 @@ void Tile::updateS6(int frameCounter) {
 }
 
 void Tile::drawS6() {
+  // reset color before drawing
+  ofSetColor(ofColor::white);
   image.draw(x*w, y*h);
 
   // draw transparent square on top of image
