@@ -110,7 +110,7 @@ void ofApp::update(){
   }
 
   // reactivate loopBack for Scene 6
-  if (secondsElapsed > 125 && !reactivateLoopBack) {
+  if (secondsElapsed > 130 && !reactivateLoopBack) {
     loopBack = true;
     reactivateLoopBack = true;
   }

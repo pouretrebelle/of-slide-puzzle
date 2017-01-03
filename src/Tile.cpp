@@ -22,9 +22,10 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[0] = 100 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
   transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
   transitions[2] = 50 + (initialX + initialY) * 2; // 50-80 seconds
-  transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
-  transitions[4] = 110 + (initialX + initialY) * 1; // 110 - 125 seconds
-  transitions[5] = 125; // 125 seconds
+  transitions[3] = 105 - (initialX + initialY) * 1; // 90-105 seconds
+  transitions[4] = 110 + (initialX + initialY) * 0.5; // 110 - 120 seconds
+  transitions[5] = 115 + (initialX + initialY) * 1; // 115 - 130 seconds
+  transitions[6] = 130; // 130 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
@@ -99,6 +100,12 @@ void Tile::update(int frameCounter, float secondsElapsed) {
     curFrame = 0;
     setupS6();
   }
+  else if (secondsElapsed > transitions[6] && scene < 7) {
+    // scene 7
+    scene = 7;
+    curFrame = 0;
+    setupS6();
+  }
 
   // update scene
   switch (scene) {
@@ -109,6 +116,7 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   case 4: updateS4(frameCounter); break;
   case 5: updateS5(frameCounter); break;
   case 6: updateS6(frameCounter); break;
+  case 7: updateS7(frameCounter); break;
   }
 }
 
@@ -126,6 +134,7 @@ void Tile::draw() {
   case 4: drawS4(); break;
   case 5: drawS5(); break;
   case 6: drawS6(); break;
+  case 7: drawS7(); break;
   }
 }
 
@@ -474,13 +483,11 @@ void Tile::drawS4() {
 
 // Scene 5
 //=====================================
-// morph into squares with images
+// morph into squares
 
 void Tile::setupS5() {
   squircleness = 1;
   squirclenessIncrement = -0.02;
-
-  squircleMask.allocate(w, h, GL_RGBA);
 }
 
 void Tile::updateS5(int frameCounter) {
@@ -492,33 +499,15 @@ void Tile::updateS5(int frameCounter) {
   updateImageSometimes(frameCounter);
   // lerp color towards target color
   color.lerp(targetColor, colorLerpScalar);
-
-  // make squircle path and draw it into masked image
-  squircle = pathSquircle(dotSize*0.5, squircleness);
-  squircleMask.begin();
-  squircle.setFillColor(255);
-  squircle.draw();
-  squircleMask.end();
-
-  // mask out image
-  imageMasked = image.getTexture();
-  imageMasked.setAlphaMask(squircleMask.getTexture());
 }
 
 void Tile::drawS5() {
   ofPushMatrix();
+  ofTranslate(x*w, y*h);
 
-  // draw masked image
-  imageMasked.draw(x*w, y*h);
-
-  // if it's not square draw the squircle on top
-  // slowly reduce opacity
-  if (squircleness > 0) {
-    ofColor colorTrans = color;
-    colorTrans.a = squircleness * 255;
-    squircle.setFillColor(colorTrans);
-    squircle.draw(x*w, y*h);
-  }
+  ofPath squircle = pathSquircle(dotSize*0.5, squircleness);
+  squircle.setFillColor(color);
+  squircle.draw();
 
   ofPopMatrix();
 }
@@ -526,16 +515,44 @@ void Tile::drawS5() {
 
 // Scene 6
 //=====================================
-// solve puzzle
+// fade into images
 
 void Tile::setupS6() {
+  opacity = 1;
+  opacityIncrement -= 0.02;
 }
 
 void Tile::updateS6(int frameCounter) {
-  updateS0(frameCounter);
+  if (opacity > 0) {
+    opacity += opacityIncrement;
+  }
 }
 
 void Tile::drawS6() {
+  image.draw(x*w, y*h);
+
+  // draw transparent square on top of image
+  if (opacity > 0) {
+    ofColor colorTrans = color;
+    colorTrans.a = opacity * 255;
+    ofSetColor(colorTrans);
+    ofDrawRectangle(x*w, y*h, w-gutter, h-gutter);
+  }
+}
+
+
+// Scene 7
+//=====================================
+// solve puzzle
+
+void Tile::setupS7() {
+}
+
+void Tile::updateS7(int frameCounter) {
+  updateS0(frameCounter);
+}
+
+void Tile::drawS7() {
   drawS0();
 }
 

@@ -104,10 +104,8 @@ public:
 
   // Scene 5
   //===================================
-  // morph into squares with images
+  // morph into squares
 
-  ofFbo squircleMask;
-  ofTexture imageMasked;
   void setupS5();
   void updateS5(int frameCounter);
   void drawS5();
@@ -115,11 +113,22 @@ public:
 
   // Scene 6
   //===================================
-  // solve puzzle
+  // fade into images
 
   void setupS6();
   void updateS6(int frameCounter);
   void drawS6();
+
+
+  // Scene 7
+  //===================================
+  // solve puzzle
+
+  float opacity;
+  float opacityIncrement;
+  void setupS7();
+  void updateS7(int frameCounter);
+  void drawS7();
 
 
   // Helper Functions
