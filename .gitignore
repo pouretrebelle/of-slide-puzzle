@@ -8,6 +8,7 @@
 # Windows
 *.VC.opendb
 *.VC.db
+.vs/
 
 # Generated artefacts
 bin/*_debug*
