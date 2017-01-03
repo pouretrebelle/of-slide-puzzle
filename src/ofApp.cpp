@@ -4,9 +4,11 @@
 //=====================================
 
 void ofApp::setup(){
-  ofSetFrameRate(60);
+  ofSetFrameRate(30);
   ofSetCircleResolution(100);
   ofBackground(255);
+
+  animationBegan;
 
   // set timers
   secondsElapsed = 0;
@@ -14,11 +16,7 @@ void ofApp::setup(){
   secondsElapsedLastMoved = 0;
   frameCounter = 0;
 
-  animationBegan;
-
-  // Scene 0
-  //-----------------------------------
-
+  // position variables
   tileGutter = 10;
   windowW = ofGetWidth() - tileGutter;
   windowH = ofGetHeight() - tileGutter;
@@ -28,8 +26,7 @@ void ofApp::setup(){
   tileH = windowH / tilesY;
   blank = ofVec2f(0, 0);
 
-  // Scene 4
-  //-----------------------------------
+  // scene-relevent variables
   reinitialiseMoves = false;
   reactivateLoopBack = false;
 
@@ -54,7 +51,7 @@ void ofApp::setup(){
 
   // set up the camera
   vidGrabber.setDeviceID(0);
-  vidGrabber.setDesiredFrameRate(1);
+  vidGrabber.setDesiredFrameRate(10);
   vidGrabber.initGrabber(640, 480);
   // open video settings on start
   vidGrabber.videoSettings();
@@ -92,8 +89,9 @@ void ofApp::update(){
   // stop updating from this line if the animation hasn't begun
   if (!animationBegan) return;
 
-  // exit program if it's been more than 3 minutes
-  if (secondsElapsed > 3 * 60) ofExit();
+
+  // Frame things
+  //-----------------------------------
 
   // log the frame rate
   cout << ofGetFrameRate() << endl;
@@ -101,8 +99,29 @@ void ofApp::update(){
   // increment the frame counter
   frameCounter++;
 
-  // undo existing moves
-  // every secondsBetweenMoves
+
+  // Timing things
+  //-----------------------------------
+
+  // reinitialise moves after Scene 3
+  if (secondsElapsed > 105 && !reinitialiseMoves) {
+    initialiseMoves(165);
+    reinitialiseMoves = true;
+  }
+
+  // reactivate loopBack for Scene 6
+  if (secondsElapsed > 125 && !reactivateLoopBack) {
+    loopBack = true;
+    reactivateLoopBack = true;
+  }
+
+  // exit program if it's been more than 3 minutes
+  if (secondsElapsed > 3 * 60) ofExit();
+
+
+  // Undo existing moves every secondsBetweenMoves
+  //-----------------------------------
+
   if (secondsElapsedLastMoved < (secondsElapsed - secondsBetweenMoves)) {
     // if loopBack is true and there are moves
     if (loopBack && moves.size()) {
@@ -117,18 +136,6 @@ void ofApp::update(){
     }
     // increment last moved variable
     secondsElapsedLastMoved += secondsBetweenMoves;
-  }
-
-  // reinitialise moves after Scene 3
-  if (secondsElapsed > 105 && !reinitialiseMoves) {
-    initialiseMoves(165);
-    reinitialiseMoves = true;
-  }
-
-  // reactivate loopBack for Scene 6
-  if (secondsElapsed > 125 && !reactivateLoopBack) {
-    loopBack = true;
-    reactivateLoopBack = true;
   }
 
 }
