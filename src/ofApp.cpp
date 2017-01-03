@@ -54,6 +54,8 @@ void ofApp::setup(){
   vidGrabber.setDeviceID(0);
   vidGrabber.setDesiredFrameRate(1);
   vidGrabber.initGrabber(640, 480);
+  // open video settings on start
+  vidGrabber.videoSettings();
 
   // initialise the first x moves and the looper
   initialiseMoves(initialMoves);
