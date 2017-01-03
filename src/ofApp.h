@@ -11,7 +11,10 @@ class ofApp : public ofBaseApp{
     void updateTile(int i);
     void draw();
 
+    bool animationBegan;
+
     float secondsElapsed;
+    float secondsElapsedSinceBegan;
     float secondsElapsedLastMoved;
     float secondsBetweenMoves;
 
@@ -50,7 +53,6 @@ class ofApp : public ofBaseApp{
     //===================================
 
     void windowResized(int w, int h);
-    void mousePressed(int x, int y, int button);
     void keyPressed(int key);
 
 };

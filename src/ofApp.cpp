@@ -10,9 +10,11 @@ void ofApp::setup(){
 
   // set timers
   secondsElapsed = 0;
+  secondsElapsedSinceBegan = 0;
   secondsElapsedLastMoved = 0;
   frameCounter = 0;
 
+  animationBegan;
 
   // Scene 0
   //-----------------------------------
@@ -68,15 +70,7 @@ void ofApp::setup(){
 
 void ofApp::update(){
   // set seconds elapsed
-  secondsElapsed = ofGetElapsedTimeMillis() * 0.001;
-  // exit program if it's been more than 3 minutes
-  if (secondsElapsed > 3 * 60) ofExit();
-
-  // log the frame rate
-  cout << ofGetFrameRate() << endl;
-
-  // increment the frame counter
-  frameCounter++;
+  secondsElapsed = ofGetElapsedTimeMillis() * 0.001 - secondsElapsedSinceBegan;
 
   // update the image frame
   vidGrabber.update();
@@ -88,6 +82,24 @@ void ofApp::update(){
     newImage.resize(windowW, windowH);
     image = newImage;
   }
+
+  // call update on all the tiles
+  // apart from the first one, we don't care about that one
+  for (int i = 1; i < tilesY*tilesX; i++) {
+    updateTile(i);
+  }
+
+  // stop updating from this line if the animation hasn't begun
+  if (!animationBegan) return;
+
+  // exit program if it's been more than 3 minutes
+  if (secondsElapsed > 3 * 60) ofExit();
+
+  // log the frame rate
+  cout << ofGetFrameRate() << endl;
+
+  // increment the frame counter
+  frameCounter++;
 
   // undo existing moves
   // every secondsBetweenMoves
@@ -119,11 +131,6 @@ void ofApp::update(){
     reactivateLoopBack = true;
   }
 
-  // call update on all the tiles
-  // apart from the first one, we don't care about that one
-  for (int i = 1; i < tilesY*tilesX; i++) {
-    updateTile(i);
-  }
 }
 
 
@@ -147,8 +154,6 @@ void ofApp::draw(){
 //=====================================
 
 void ofApp::updateTile(int i) {
-  tiles[i].update(frameCounter, secondsElapsed);
-
   // if the tile image should be updated
   if (tiles[i].updateImage == true) {
     ofImage tileImage;
@@ -157,6 +162,9 @@ void ofApp::updateTile(int i) {
     tiles[i].image.clone(tileImage);
     tiles[i].targetColor = tileImage.getColor(tileW*0.5, tileH*0.5);
   }
+
+  // call update on the tiles
+  tiles[i].update(frameCounter, secondsElapsed);
 
   // Boiding
   //-----------------------------------
@@ -286,15 +294,13 @@ void ofApp::initialiseMoves(int count) {
 // Interaction
 //=====================================
 
-// Mouse and Key presses
+// Space bar to begin animation
 //-------------------------------------
 
-void ofApp::mousePressed(int x, int y, int button) {
-  move(getADirection());
-}
 void ofApp::keyPressed(int key) {
-  if (key == ' ') {
-    loopBack = !loopBack;
+  if (key == ' ' && !animationBegan) {
+    animationBegan = true;
+    secondsElapsedSinceBegan = secondsElapsed;
   }
 }
 
