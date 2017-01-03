@@ -24,6 +24,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[2] = 50 + (initialX + initialY) * 1.5; // 50-70 seconds
   transitions[3] = 105 - (x + y) * 1; // 90-105 seconds
   transitions[4] = 110 + (initialX + initialY) * 1; // 110 - 125 seconds
+  transitions[5] = 125; // 125 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
@@ -92,6 +93,12 @@ void Tile::update(int frameCounter, float secondsElapsed) {
     curFrame = 0;
     setupS5();
   }
+  else if (secondsElapsed > transitions[5] && scene < 6) {
+    // scene 6
+    scene = 6;
+    curFrame = 0;
+    setupS6();
+  }
 
   // update scene
   switch (scene) {
@@ -101,6 +108,7 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   case 3: updateS3(frameCounter); break;
   case 4: updateS4(frameCounter); break;
   case 5: updateS5(frameCounter); break;
+  case 6: updateS6(frameCounter); break;
   }
 }
 
@@ -117,6 +125,7 @@ void Tile::draw() {
   case 3: drawS3(); break;
   case 4: drawS4(); break;
   case 5: drawS5(); break;
+  case 6: drawS6(); break;
   }
 }
 
@@ -505,6 +514,20 @@ void Tile::drawS5() {
   }
 
   ofPopMatrix();
+}
+
+
+// Scene 6
+//=====================================
+// solve puzzle
+
+void Tile::setupS6() {
+}
+
+void Tile::updateS6(int frameCounter) {
+}
+
+void Tile::drawS6() {
 }
 
 

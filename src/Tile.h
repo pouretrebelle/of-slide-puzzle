@@ -113,6 +113,15 @@ public:
   void drawS5();
 
 
+  // Scene 6
+  //===================================
+  // solve puzzle
+
+  void setupS6();
+  void updateS6(int frameCounter);
+  void drawS6();
+
+
   // Helper Functions
   //===================================
 
