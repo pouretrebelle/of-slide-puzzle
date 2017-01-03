@@ -23,6 +23,8 @@ class ofApp : public ofBaseApp{
     // Scene 0
     //===================================
 
+    bool useWebcam;
+    ofVideoPlayer vidPlayer;
     ofVideoGrabber vidGrabber;
     bool loopBack;
     int** tilePositions;
