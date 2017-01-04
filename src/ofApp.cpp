@@ -186,7 +186,7 @@ void ofApp::updateTile(int i) {
     float closestDistance = windowW;
 
     // loop through others
-    for (int j = 0; j < tilesY*tilesX; j++) {
+    for (int j = 1; j < tilesY*tilesX; j++) {
       float dist = pos.distance(tiles[j].pos);
 
       // if target is boiding and not itself
