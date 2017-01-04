@@ -9,3 +9,5 @@ To compile it needs to be inside the `myApps` folder of your openFrameworks inst
 ## Screenshots
 
 ![Screenshots](/bin/data/screenshots.jpg?raw=true)
+
+[Watch the video on Vimeo](https://vimeo.com/198070035)
