@@ -18,13 +18,13 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
 
   // first transition is determined by secondsBetweenMoves and initialMoves
   // in ofApp.cpp, and it initial tile position
-  transitions[0] = 100 * 0.3 + (initialX + initialY) * 0.3; // ~32 seconds
-  transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
-  transitions[2] = 50 + (initialX + initialY) * 2; // 50-80 seconds
-  transitions[3] = 105 - (initialX + initialY) * 1; // 90-105 seconds
-  transitions[4] = 114 - (initialX*0.8 + initialY) * 1.2; // 100 - 114 seconds
-  transitions[5] = 124 - (initialX*0.8 + initialY) * 1.2; // 110 - 124 seconds
-  transitions[6] = 124; // 124 seconds
+  transitions[0] = 140 * 0.3 + (initialX + initialY) * 0.3; // 42 - 46 seconds
+  transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // 44 - 47 seconds
+  transitions[2] = 62 + (initialX + initialY) * 2; // 62-92 seconds
+  transitions[3] = 117 - (initialX + initialY) * 1; // 102-117 seconds
+  transitions[4] = 126 - (initialX*0.8 + initialY) * 1.2; // 110 - 126 seconds
+  transitions[5] = 136 - (initialX*0.8 + initialY) * 1.2; // 120 - 136 seconds
+  transitions[6] = 136; // 136 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
