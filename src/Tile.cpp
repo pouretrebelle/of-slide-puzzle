@@ -160,6 +160,11 @@ void Tile::updateBoids(int frameCounter) {
   if (clampedVel.length() > speedMax) {
     clampedVel.scale(speedMax);
   }
+  // check that max speed is more than min
+  // because it's incremented from 0 for initial acceleration
+  else if (speedMax > speedMin && clampedVel.length() < speedMin) {
+    clampedVel.scale(speedMin);
+  }
 
   // update position
   pos += clampedVel;
@@ -314,15 +319,16 @@ void Tile::setupS2() {
   scene = 2;
 
   speed = 3;
+  speedMin = 2;
   speedMax = 0;
   speedMaxIncrement = 0.1;
   speedMaxLimit = 6;
   colorLerpScalar = 0.1;
-  avoidanceDist = 40;
-  avoidanceScalar = 0.01;
-  cohesionDist = 80;
+  avoidanceDist = 10;
+  avoidanceScalar = 0.02;
+  cohesionDist = 20;
   cohesionScalar = 0.005;
-  alignDist = 60;
+  alignDist = 30;
   alignScalar = 0.01;
 
   // setup position
@@ -381,10 +387,10 @@ void Tile::setupS3() {
   squircleness = 0;
   squirclenessIncrement = 0.02;
   dotSizeIncrement = 0;
+  dotSizeMin = 30;
 
   // up avoidance scalar to avoid overlapping
   avoidanceScalar = 0.1;
-  avoidanceDistIncrement = 0.1;
 }
 
 void Tile::updateS3(int frameCounter) {
@@ -400,13 +406,9 @@ void Tile::updateS3(int frameCounter) {
     dotSizeIncrement += 0.005;
   }
 
-  // lerp towards target, make sure it's > 20
-  dotSizeTarget = (dotSizeTarget < 20) ? 20 : dotSizeTarget;
+  // lerp towards target, make sure it's > dotSizeMin
+  dotSizeTarget = (dotSizeTarget < dotSizeMin) ? dotSizeMin : dotSizeTarget;
   dotSize = ofLerp(dotSize, dotSizeTarget, dotSizeIncrement);
-
-  // lerp avoidance distance towards dot size
-  // to encourage biggest dots possible
-  avoidanceDist = ofLerp(avoidanceDist, dotSize+gutter, avoidanceDistIncrement);
 
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
@@ -466,9 +468,6 @@ void Tile::updateS4(int frameCounter) {
 
     // lerp dot size towards target
     dotSize = ofLerp(dotSize, dotSizeTarget, dotSizeIncrement);
-
-    // lerp avoidance distance a bit inside dot size
-    avoidanceDist = ofLerp(avoidanceDist, dotSize - gutter*0.5, avoidanceDistIncrement);
 
     // use exponentials to control the position lerping factor
     // to counteract zeno's position

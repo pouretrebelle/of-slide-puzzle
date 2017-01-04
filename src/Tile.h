@@ -63,6 +63,7 @@ public:
   bool boiding;
   float colorLerpScalar;
   float speed;
+  float speedMin;
   float speedMax;
   float speedMaxIncrement;
   float speedMaxLimit;
@@ -85,7 +86,7 @@ public:
   float squirclenessIncrement;
   float dotSizeTarget;
   float dotSizeIncrement;
-  float avoidanceDistIncrement;
+  float dotSizeMin;
   ofPath squircle;
   void setupS3();
   void updateS3(int frameCounter);

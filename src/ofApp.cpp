@@ -188,7 +188,12 @@ void ofApp::updateTile(int i) {
 
     // loop through others
     for (int j = 1; j < tilesY*tilesX; j++) {
-      float dist = pos.distance(tiles[j].pos);
+      // get distance between dots
+      float totalDist = pos.distance(tiles[j].pos);
+      // and between dot edges
+      float dist = totalDist;
+      dist -= tiles[i].dotSize*0.5;
+      dist -= tiles[j].dotSize*0.5;
 
       // if target is boiding and not itself
       if (tiles[j].boiding && j != i) {
@@ -198,6 +203,8 @@ void ofApp::updateTile(int i) {
           ofVec2f reverseDiff = (tiles[j].pos - pos);
           reverseDiff.scale(tiles[i].avoidanceDist-dist);
           seperate -= reverseDiff;
+
+          if (ofRandom(1) < 0.01) cout << dist << endl;
         }
 
         // Cohesion
@@ -215,8 +222,8 @@ void ofApp::updateTile(int i) {
 
       // if it's scene 3-4 and not itself
       if (tiles[i].scene > 2 && tiles[i].scene < 5 && j != i) {
-        if (closestDistance > dist) {
-          closestDistance = dist;
+        if (closestDistance > totalDist) {
+          closestDistance = totalDist;
         }
       }
     }
