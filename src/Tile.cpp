@@ -107,7 +107,8 @@ void Tile::draw() {
 // Shared Functions
 //=====================================
 
-// Image Updates - every scene but 1
+// Image Updates - every scene
+// not in global update because different often variable
 //-------------------------------------
 void Tile::updateImageSometimes(int frameCounter, int often = 20) {
   // update tile based on its initial position
@@ -284,6 +285,8 @@ void Tile::setupS1() {
 }
 
 void Tile::updateS1(int frameCounter) {
+  // update image every 5 frames
+  updateImageSometimes(frameCounter, 5);
 }
 
 void Tile::drawS1() {
