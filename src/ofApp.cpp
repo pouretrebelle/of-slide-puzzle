@@ -33,7 +33,7 @@ void ofApp::setup(){
   // animation variables
   secondsBetweenMoves = 0.3;
   initialMoves = 100;
-  scene7Moves = 170;
+  scene7Moves = 180;
 
   // initialise tile positions array
   tilePositions = new int*[tilesX];
