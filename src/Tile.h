@@ -18,6 +18,7 @@ public:
   //===================================
 
   void updateImageSometimes(int frameCounter, int often);
+  void lerpColor();
   void updateBoids(int frameCounter);
   ofPath pathSquircle(float radius, float t);
 

@@ -122,6 +122,12 @@ void Tile::updateImageSometimes(int frameCounter, int often = 20) {
   }
 }
 
+// Lerp Colour - scenes 2-5
+//-------------------------------------
+void Tile::lerpColor() {
+  color.lerp(targetColor, colorLerpScalar);
+}
+
 // Boid Updates - scene 2-4
 //-------------------------------------
 void Tile::updateBoids(int frameCounter) {
@@ -343,7 +349,7 @@ void Tile::updateS2(int frameCounter) {
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
   // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
+  lerpColor();
 }
 
 void Tile::drawS2() {
@@ -402,7 +408,7 @@ void Tile::updateS3(int frameCounter) {
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
   // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
+  lerpColor();
 }
 
 void Tile::drawS3() {
@@ -476,7 +482,7 @@ void Tile::updateS4(int frameCounter) {
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
   // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
+  lerpColor();
 }
 
 void Tile::drawS4() {
@@ -514,7 +520,7 @@ void Tile::updateS5(int frameCounter) {
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
   // lerp color towards target color
-  color.lerp(targetColor, colorLerpScalar);
+  lerpColor();
 }
 
 void Tile::drawS5() {
