@@ -529,7 +529,7 @@ void Tile::drawS5() {
 
 void Tile::setupS6() {
   opacity = 1;
-  opacityIncrement -= 0.02;
+  opacityIncrement = -0.02;
 }
 
 void Tile::updateS6(int frameCounter) {
