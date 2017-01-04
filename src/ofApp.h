@@ -30,6 +30,7 @@ class ofApp : public ofBaseApp{
     bool loopBack;
     int** tilePositions;
     int initialMoves;
+    int scene7Moves;
     int tileGutter;
     ofVec2f blank;
     ofVec2f lastDirection;

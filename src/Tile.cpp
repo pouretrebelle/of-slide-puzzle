@@ -22,9 +22,9 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   transitions[1] = transitions[0] + 2 + (initialX + initialY) * 0.2; // ~36 seconds
   transitions[2] = 50 + (initialX + initialY) * 2; // 50-80 seconds
   transitions[3] = 105 - (initialX + initialY) * 1; // 90-105 seconds
-  transitions[4] = 110 + (initialX + initialY) * 0.5; // 110 - 120 seconds
-  transitions[5] = 115 + (initialX + initialY) * 1; // 115 - 130 seconds
-  transitions[6] = 130; // 130 seconds
+  transitions[4] = 114 - (initialX*0.8 + initialY) * 1.2; // 100 - 114 seconds
+  transitions[5] = 124 - (initialX*0.8 + initialY) * 1.2; // 110 - 124 seconds
+  transitions[6] = 126; // 126 seconds
 
   // controls whether ofApp.cpp compares tiles
   boiding = false;
@@ -115,7 +115,7 @@ void Tile::updateImageSometimes(int frameCounter, int often = 20) {
   // creates diagonal sequential update pattern
   // often is how many frames per update
   // default to 20 for dot colour update
-  if ((frameCounter - initialX + initialY) % often == 0) {
+  if ((frameCounter - (initialX + initialY)) % often == 0) {
     updateImage = true;
   }
   else {
@@ -502,7 +502,7 @@ void Tile::setupS5() {
   scene = 5;
 
   squircleness = 1;
-  squirclenessIncrement = -0.02;
+  squirclenessIncrement = -0.03;
 }
 
 void Tile::updateS5(int frameCounter) {
@@ -551,7 +551,7 @@ void Tile::setupS6() {
   scene = 6;
 
   opacity = 1;
-  opacityIncrement = -0.02;
+  opacityIncrement = -0.04;
 }
 
 void Tile::updateS6(int frameCounter) {

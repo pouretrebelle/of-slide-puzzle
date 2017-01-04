@@ -33,6 +33,7 @@ void ofApp::setup(){
   // animation variables
   secondsBetweenMoves = 0.3;
   initialMoves = 100;
+  scene7Moves = 170;
 
   // initialise tile positions array
   tilePositions = new int*[tilesX];
@@ -105,12 +106,12 @@ void ofApp::update(){
 
   // reinitialise moves after Scene 3
   if (secondsElapsed > 80 && !reinitialiseMoves) {
-    initialiseMoves(165);
+    initialiseMoves(scene7Moves);
     reinitialiseMoves = true;
   }
 
   // reactivate loopBack for Scene 6
-  if (secondsElapsed > 130 && !reactivateLoopBack) {
+  if (secondsElapsed > 126 && !reactivateLoopBack) {
     loopBack = true;
     reactivateLoopBack = true;
   }
