@@ -450,7 +450,7 @@ void Tile::updateS4(int frameCounter) {
     vel.y = 0;
 
     // stop ofApp.cpp comparing it to other tiles
-    boiding = true;
+    boiding = false;
 
     posTargetAchieved = true;
   }
@@ -502,6 +502,16 @@ void Tile::updateS5(int frameCounter) {
     squircleness += squirclenessIncrement;
   }
 
+  // if position and size aren't what we want them to be yet
+  // lerp towards them
+  if (pos.distance(posTarget) > 0.2) {
+    pos.x = ofLerp(pos.x, posTarget.x, 0.1);
+    pos.y = ofLerp(pos.y, posTarget.y, 0.1);
+  }
+  if (abs(dotSize - (w - gutter)) > 0.2) {
+    dotSize = ofLerp(dotSize, w - gutter, 0.1);
+  }
+
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
   // lerp color towards target color
@@ -513,7 +523,9 @@ void Tile::drawS5() {
   ofSetColor(ofColor::white);
 
   ofPushMatrix();
-  ofTranslate(x*w, y*h);
+
+  // translate to position minus dot size
+  ofTranslate(pos.x-dotSize*0.5, pos.y-dotSize*0.5);
 
   ofPath squircle = pathSquircle(dotSize*0.5, squircleness);
   squircle.setFillColor(color);
@@ -546,6 +558,8 @@ void Tile::updateS6(int frameCounter) {
 void Tile::drawS6() {
   // reset color before drawing
   ofSetColor(ofColor::white);
+  // position should now have parity with x and y
+  // so just draw at exact location
   image.draw(x*w, y*h);
 
   // draw transparent square on top of image
