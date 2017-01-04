@@ -35,6 +35,7 @@ public:
   float startX, startY, endX, endY;
   int tileMoveAnimFrames;
   void move(ofVec2f dir, bool easing);
+  void setupS0();
   void updateS0(int frameCounter, float secondsElapsed);
   void drawS0();
 

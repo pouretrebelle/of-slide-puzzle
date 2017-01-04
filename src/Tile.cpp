@@ -13,8 +13,7 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   h = _h;
   gutter = _gutter;
 
-  // initialise scene and transition array
-  scene = 0;
+  // initialise transition array
   transitions = new float[5];
 
   // first transition is determined by secondsBetweenMoves and initialMoves
@@ -30,29 +29,8 @@ Tile::Tile(int _x, int _y, float _w, float _h, float _gutter) {
   // controls whether ofApp.cpp compares tiles
   boiding = false;
 
-  // Scene 0
-  //-----------------------------------
-  tileMoveAnimFrames = 10;
-
-  // Scene 1
-  //-----------------------------------
-  tileSizeAnimFrames = 30;
-  dotSize = 14;
-  dotSizeTarget = dotSize;
-
-  // Scene 2
-  //-----------------------------------
-  speed = 3;
-  speedMax = 0;
-  speedMaxIncrement = 0.1;
-  speedMaxLimit = 6;
-  colorLerpScalar = 0.1;
-  avoidanceDist = 40;
-  avoidanceScalar = 0.01;
-  cohesionDist = 80;
-  cohesionScalar = 0.005;
-  alignDist = 60;
-  alignScalar = 0.01;
+  // set up first scene
+  setupS0();
 }
 
 
@@ -63,49 +41,35 @@ void Tile::update(int frameCounter, float secondsElapsed) {
   // increment current frame
   curFrame++;
 
-  // set scene
+  // setup scene
   //-------------------------------------
   if (secondsElapsed > transitions[0] && scene < 1) {
     // scene 1
-    scene = 1;
-    curFrame = 0;
     setupS1();
   }
   else if (secondsElapsed > transitions[1] && scene < 2) {
     // scene 2
-    scene = 2;
-    curFrame = 0;
     setupS2();
   }
   else if (secondsElapsed > transitions[2] && scene < 3) {
     // scene 3
-    scene = 3;
-    curFrame = 0;
     setupS3();
   }
   else if (secondsElapsed > transitions[3] && scene < 4) {
     // scene 4
-    scene = 4;
-    curFrame = 0;
     setupS4();
   }
   else if (secondsElapsed > transitions[4] && scene < 5) {
     // scene 5
-    scene = 5;
-    curFrame = 0;
     setupS5();
   }
   else if (secondsElapsed > transitions[5] && scene < 6) {
     // scene 6
-    scene = 6;
-    curFrame = 0;
     setupS6();
   }
   else if (secondsElapsed > transitions[6] && scene < 7) {
     // scene 7
-    scene = 7;
-    curFrame = 0;
-    setupS6();
+    setupS7();
   }
 
   // update scene
@@ -244,6 +208,12 @@ ofPath Tile::pathSquircle(float radius, float t) {
 //=====================================
 // solve puzzle
 
+void Tile::setupS0() {
+  scene = 0;
+  tileMoveAnimFrames = 10;
+  curFrame = 0;
+}
+
 void Tile::updateS0(int frameCounter, float secondsElapsed = 0) {
   if (moving) {
     x = easeOutCubic(curFrame, startX, endX - startX, tileMoveAnimFrames);
@@ -293,6 +263,13 @@ void Tile::move(ofVec2f dir, bool easing) {
 // reduce to dots
 
 void Tile::setupS1() {
+  scene = 1;
+
+  tileSizeAnimFrames = 30;
+  dotSize = 14;
+  dotSizeTarget = dotSize;
+  curFrame = 0;
+
   // make sure the x+y are positioned absolutely
   x = initialX;
   y = initialY;
@@ -325,6 +302,20 @@ void Tile::drawS1() {
 // boid about
 
 void Tile::setupS2() {
+  scene = 2;
+
+  speed = 3;
+  speedMax = 0;
+  speedMaxIncrement = 0.1;
+  speedMaxLimit = 6;
+  colorLerpScalar = 0.1;
+  avoidanceDist = 40;
+  avoidanceScalar = 0.01;
+  cohesionDist = 80;
+  cohesionScalar = 0.005;
+  alignDist = 60;
+  alignScalar = 0.01;
+
   // setup position
   pos.x = x*w + (w-gutter)*0.5;
   pos.y = y*h + (h-gutter)*0.5;
@@ -376,6 +367,8 @@ void Tile::drawS2() {
 // grow into circles
 
 void Tile::setupS3() {
+  scene = 3;
+
   squircleness = 0;
   squirclenessIncrement = 0.02;
   dotSizeIncrement = 0;
@@ -438,6 +431,8 @@ void Tile::drawS3() {
 // reform grid
 
 void Tile::setupS4() {
+  scene = 4;
+
   posTargetAchieved = false;
   posTargetLerp = 0.01;
   posTargetIncrement = 0.001;
@@ -495,6 +490,8 @@ void Tile::drawS4() {
 // morph into squares
 
 void Tile::setupS5() {
+  scene = 5;
+
   squircleness = 1;
   squirclenessIncrement = -0.02;
 }
@@ -542,6 +539,8 @@ void Tile::drawS5() {
 // fade into images
 
 void Tile::setupS6() {
+  scene = 6;
+
   opacity = 1;
   opacityIncrement = -0.02;
 }
@@ -579,6 +578,7 @@ void Tile::drawS6() {
 // solve puzzle
 
 void Tile::setupS7() {
+  scene = 7;
 }
 
 void Tile::updateS7(int frameCounter) {
