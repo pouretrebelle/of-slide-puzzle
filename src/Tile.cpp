@@ -402,7 +402,7 @@ void Tile::updateS3(int frameCounter) {
 
   // lerp avoidance distance towards dot size
   // to encourage biggest dots possible
-  avoidanceDist = ofLerp(avoidanceDist, dotSize+gutter*0.5, avoidanceDistIncrement);
+  avoidanceDist = ofLerp(avoidanceDist, dotSize+gutter, avoidanceDistIncrement);
 
   // so that ofApp can update targetColor
   updateImageSometimes(frameCounter);
