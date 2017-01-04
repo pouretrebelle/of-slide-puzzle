@@ -536,6 +536,11 @@ void Tile::updateS6(int frameCounter) {
   if (opacity > 0) {
     opacity += opacityIncrement;
   }
+
+  // so that ofApp can update targetColor
+  updateImageSometimes(frameCounter);
+  // lerp color towards target color
+  color.lerp(targetColor, colorLerpScalar);
 }
 
 void Tile::drawS6() {
