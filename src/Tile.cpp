@@ -293,9 +293,11 @@ void Tile::move(ofVec2f dir, bool easing) {
 // reduce to dots
 
 void Tile::setupS1() {
-  // make sure the x+y are positioned absolutely;
+  // make sure the x+y are positioned absolutely
   x = initialX;
   y = initialY;
+  // turn off any continuing animation
+  moving = false;
 }
 
 void Tile::updateS1(int frameCounter) {
