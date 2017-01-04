@@ -195,7 +195,9 @@ void ofApp::updateTile(int i) {
 
         // Seperate
         if (dist < tiles[i].avoidanceDist) {
-          seperate -= (tiles[j].pos - pos);
+          ofVec2f reverseDiff = (tiles[j].pos - pos);
+          reverseDiff.scale(tiles[i].avoidanceDist-dist);
+          seperate -= reverseDiff;
         }
 
         // Cohesion
