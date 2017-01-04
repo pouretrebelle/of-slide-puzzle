@@ -8,7 +8,7 @@ void ofApp::setup(){
   ofSetCircleResolution(100);
   ofBackground(255);
 
-  animationBegan;
+  animationBegan = false;
 
   // set timers
   secondsElapsed = 0;
