@@ -152,9 +152,6 @@ void ofApp::draw(){
   for (int i = 1; i < tilesY*tilesX; i++) {
     tiles[i].draw();
   }
-
-  // draw progress through animation in seconds
-  ofDrawBitmapString(ofToString(secondsElapsed), 20, 20);
 }
 
 
